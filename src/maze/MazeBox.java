@@ -11,19 +11,25 @@ import graph.Vertex;
  */
 public abstract class MazeBox implements Vertex {
 	
+	public static final char wallChara = 'O';
+	public static final char emptyChara = ' ';
+	public static final char departureChara = 'D';
+	public static final char arrivalChara = 'A';
+	
 	// Référence au labyrinthe qui contient la case
 	protected Maze maze;
 	
 	//Coordonnées de la case.
 	protected int i;
 	protected int j;
-	protected char chara;
+
+	
+	public abstract char getChara();
 	
 	public MazeBox(int i, int j, Maze maze) {
 		this.i = i;
 		this.j = j;
 		this.maze = maze;
-		this.chara = '@';
 	}
 	
 	public int getI() {
@@ -31,9 +37,6 @@ public abstract class MazeBox implements Vertex {
 	}
 	public int getJ() {
 		return j;
-	}
-	public char getChara() {
-		return chara;
 	}
 	
 	@Override

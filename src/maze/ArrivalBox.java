@@ -10,7 +10,11 @@ public class ArrivalBox extends MazeBox {
 
 	public ArrivalBox(int i, int j, Maze maze) {
 		super(i, j, maze);
-		this.chara = 'A';
+	}
+
+	@Override
+	public char getChara() {
+		return MazeBox.arrivalChara;
 	}
 
 }

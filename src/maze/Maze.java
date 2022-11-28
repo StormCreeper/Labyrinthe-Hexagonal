@@ -1,11 +1,12 @@
 package maze;
-import java.io.*;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import exceptions.MazeReadingException;
 import graph.Distance;
 import graph.Graph;
 import graph.Vertex;
@@ -84,43 +85,51 @@ public class Maze implements Graph, Distance{
 		return 1;
 	}
 	
-	public final void initFromTextFile(String filename) {
+	public final void initFromTextFile(String filename) throws MazeReadingException {
 		try {
 			List<String> lines = Files.readAllLines(Paths.get(filename), StandardCharsets.UTF_8);
 			
+			if(lines.size() != height) {
+				throw new MazeReadingException(filename, -1, "Wrong number of rows, expected " + height + ", got " + lines.size() + ".");
+			}
+			
 			for(int j=0; j<height; j++) {
+				if(lines.get(j).length() != width) {
+					throw new MazeReadingException(filename, j, "Wrong number of column, expected " + width + ", got " + lines.get(j).length() + ".");
+				}
 				for(int i = 0; i<width; i++) {
 					switch (lines.get(j).charAt(i)) {
-					case 'O':
+					case MazeBox.wallChara:
 						boxes[i][j] = new WallBox(i, j, this);
 						break;
-					case ' ':
+					case MazeBox.emptyChara:
 						boxes[i][j] = new EmptyBox(i, j, this);
 						break;
-					case 'D':
+					case MazeBox.departureChara:
 						boxes[i][j] = new DepartureBox(i, j, this);
 						break;
-					case 'F':
+					case MazeBox.arrivalChara:
 						boxes[i][j] = new ArrivalBox(i, j, this);
 						break;
 					default:
-						break;
+						throw new MazeReadingException(filename, j, "Unrecognized character : " + lines.get(j).charAt(i));
 					}
 				}
 			}
-		} catch (Exception e) {
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * 
+	 * @param filename le nom du fichier dans lequel enregistrer le labyrinthe.
+	 */
 	public final void saveToTextFile(String filename) {
-		String content = "";
-		for(int j=0; j<height; j++) {
-			for(int i = 0; i<width; i++) {
-				content += boxes[i][j].getChara();
-			}
-			content += '\n';
-		}
+		// Ecrit le contenu du fichier dans une chaîne de caractère 
+		String content = toString();
+		
+		// Puis écrit tout d'un seul coup dans le fichier
 		try {
 			Files.write(Paths.get(filename), content.getBytes());
 		} catch (Exception e) {
@@ -128,13 +137,20 @@ public class Maze implements Graph, Distance{
 		}
 	}
 	
-	public final void printMaze() {
+	/**
+	 * Convertit le labyrinthe en une chaîne de charactère (dans le même format que pour l'enregistrement dans un fichier.
+	 */
+	@Override
+	public String toString() {
+		String content = "";
 		for(int j=0; j<height; j++) {
 			for(int i = 0; i<width; i++) {
-				System.out.print(boxes[i][j].getChara());
+				content += boxes[i][j].getChara();
 			}
-			System.out.println();
+			content += '\n';
 		}
+		
+		return content;
 	}
 
 }
