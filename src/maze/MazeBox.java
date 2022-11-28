@@ -11,13 +11,17 @@ import graph.Vertex;
  */
 public abstract class MazeBox implements Vertex {
 	
+	// Référence au labyrinthe qui contient la case
+	protected Maze maze;
+	
 	//Coordonnées de la case.
 	protected int i;
 	protected int j;
 	
-	public MazeBox(int i, int j) {
+	public MazeBox(int i, int j, Maze maze) {
 		this.i = i;
 		this.j = j;
+		this.maze = maze;
 	}
 	
 	public int getI() {

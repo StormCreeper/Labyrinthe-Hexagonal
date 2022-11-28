@@ -8,8 +8,8 @@ package maze;
  */
 public class DepartureBox extends MazeBox {
 
-	public DepartureBox(int i, int j) {
-		super(i, j);
+	public DepartureBox(int i, int j, Maze maze) {
+		super(i, j, maze);
 	}
 
 }

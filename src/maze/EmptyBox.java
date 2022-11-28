@@ -9,8 +9,8 @@ package maze;
  */
 public class EmptyBox extends MazeBox {
 
-	public EmptyBox(int i, int j) {
-		super(i, j);
+	public EmptyBox(int i, int j, Maze maze) {
+		super(i, j, maze);
 	}
 
 }

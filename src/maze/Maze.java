@@ -44,11 +44,9 @@ public class Maze implements Graph, Distance{
 	public ArrayList<Vertex> getVertices() {
 		ArrayList<Vertex> vertices = new ArrayList<Vertex>();
 		
-		for(int i=0; i<width; i++) {
-			for(int j=0; j<height; j++) {
+		for(int i=0; i<width; i++)
+			for(int j=0; j<height; j++)
 				addVertex(vertices, i, j);
-			}
-		}
 		
 		return vertices;
 	}
