@@ -1,4 +1,5 @@
 package maze;
+import java.io.*;
 
 import java.util.ArrayList;
 
@@ -78,6 +79,15 @@ public class Maze implements Graph, Distance{
 	@Override
 	public int getDistance(Vertex v1, Vertex v2) {
 		return 1;
+	}
+	
+	public final void initFromTextFile(String filename) {
+		try {
+			FileInputStream is = new FileInputStream(filename);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
