@@ -10,6 +10,7 @@ public class WallBox extends MazeBox {
 
 	public WallBox(int i, int j, Maze maze) {
 		super(i, j, maze);
+		this.chara = 'O';
 	}
 
 }

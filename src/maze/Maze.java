@@ -1,7 +1,10 @@
 package maze;
 import java.io.*;
-
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 import graph.Distance;
 import graph.Graph;
@@ -83,10 +86,54 @@ public class Maze implements Graph, Distance{
 	
 	public final void initFromTextFile(String filename) {
 		try {
-			FileInputStream is = new FileInputStream(filename);
+			List<String> lines = Files.readAllLines(Paths.get(filename), StandardCharsets.UTF_8);
 			
+			for(int j=0; j<height; j++) {
+				for(int i = 0; i<width; i++) {
+					switch (lines.get(j).charAt(i)) {
+					case 'O':
+						boxes[i][j] = new WallBox(i, j, this);
+						break;
+					case ' ':
+						boxes[i][j] = new EmptyBox(i, j, this);
+						break;
+					case 'D':
+						boxes[i][j] = new DepartureBox(i, j, this);
+						break;
+					case 'F':
+						boxes[i][j] = new ArrivalBox(i, j, this);
+						break;
+					default:
+						break;
+					}
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public final void saveToTextFile(String filename) {
+		String content = "";
+		for(int j=0; j<height; j++) {
+			for(int i = 0; i<width; i++) {
+				content += boxes[i][j].getChara();
+			}
+			content += '\n';
+		}
+		try {
+			Files.write(Paths.get(filename), content.getBytes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public final void printMaze() {
+		for(int j=0; j<height; j++) {
+			for(int i = 0; i<width; i++) {
+				System.out.print(boxes[i][j].getChara());
+			}
+			System.out.println();
 		}
 	}
 

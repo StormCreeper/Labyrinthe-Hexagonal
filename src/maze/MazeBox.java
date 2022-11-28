@@ -17,11 +17,13 @@ public abstract class MazeBox implements Vertex {
 	//Coordonnées de la case.
 	protected int i;
 	protected int j;
+	protected char chara;
 	
 	public MazeBox(int i, int j, Maze maze) {
 		this.i = i;
 		this.j = j;
 		this.maze = maze;
+		this.chara = '@';
 	}
 	
 	public int getI() {
@@ -29,6 +31,9 @@ public abstract class MazeBox implements Vertex {
 	}
 	public int getJ() {
 		return j;
+	}
+	public char getChara() {
+		return chara;
 	}
 	
 	@Override
