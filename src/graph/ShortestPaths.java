@@ -1,5 +1,7 @@
 package graph;
 
+import java.util.List;
+
 /**
  * Interface définissant le chemin le plus court d'un sommet à l'origine, sous forme de liste chaînée.
  * @author Telo PHILIPPE
@@ -20,4 +22,6 @@ public interface ShortestPaths {
 	 * @param previous son prédécesseur.
 	 */
 	public void setPrevious(Vertex vertex, Vertex previous);
+	
+	public List<Vertex> getShortestPath(Vertex endVertex);
 }

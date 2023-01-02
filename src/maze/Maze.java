@@ -24,11 +24,16 @@ public class Maze implements Graph, Distance{
 	private MazeBox[][] boxes;
 	private int width, height;
 	
+	public ArrayList<Vertex> arrivals;
+	public ArrayList<Vertex> departures;
+	
 	public Maze(int width, int height) {
 		this.width = width;
 		this.height = height;
 		
 		boxes = new MazeBox[width][height];
+		arrivals = new ArrayList<Vertex>();
+		departures = new ArrayList<Vertex>();
 	}
 	
 	/**
@@ -41,6 +46,8 @@ public class Maze implements Graph, Distance{
 	private void addVertex(ArrayList<Vertex> vertices, int i, int j) {
 		if(i<0 || i >= width) return;
 		if(j<0 || j >= height) return;
+		
+		//if(boxes[i][j].getChara() != MazeBox.emptyChara) return;
 		
 		vertices.add(boxes[i][j]);
 	}
@@ -61,6 +68,9 @@ public class Maze implements Graph, Distance{
 		ArrayList<Vertex> successors = new ArrayList<Vertex>();
 		
 		MazeBox mazeBox = (MazeBox)vertex;
+		
+		if(mazeBox.getChara() == MazeBox.wallChara) return successors;
+		
 		int i = mazeBox.getI();
 		int j = mazeBox.getJ();
 		
@@ -107,9 +117,11 @@ public class Maze implements Graph, Distance{
 						break;
 					case MazeBox.departureChara:
 						boxes[i][j] = new DepartureBox(i, j, this);
+						departures.add(boxes[i][j]);
 						break;
 					case MazeBox.arrivalChara:
 						boxes[i][j] = new ArrivalBox(i, j, this);
+						arrivals.add(boxes[i][j]);
 						break;
 					default:
 						throw new MazeReadingException(filename, j, "Unrecognized character : " + lines.get(j).charAt(i));
@@ -151,6 +163,17 @@ public class Maze implements Graph, Distance{
 		}
 		
 		return content;
+	}
+	
+	public void drawWithPath(List<Vertex> vertices) {
+		char[] content = toString().toCharArray();
+		
+		for(Vertex v : vertices) {
+			MazeBox m = (MazeBox)v;
+			content[m.getI() + (width + 1) * m.getJ()] = 'x';
+		}
+		
+		System.out.print(String.valueOf(content));
 	}
 
 }
