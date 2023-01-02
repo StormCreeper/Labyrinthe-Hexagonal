@@ -165,11 +165,16 @@ public class Maze implements Graph, Distance{
 		return content;
 	}
 	
+	/**
+	 * Affiche le labyrinthe en marquant d'un "x" les cases du chemin donné en paramètre/
+	 * @param vertices le chemin à afficher
+	 */
 	public void drawWithPath(List<Vertex> vertices) {
 		char[] content = toString().toCharArray();
 		
 		for(Vertex v : vertices) {
 			MazeBox m = (MazeBox)v;
+			// On traite la chaîne de caractères comme un tableau à 2 dimensions, de taille (width + 1) * height (le "+1" est pour le caractère de retour à la ligne.
 			content[m.getI() + (width + 1) * m.getJ()] = 'x';
 		}
 		

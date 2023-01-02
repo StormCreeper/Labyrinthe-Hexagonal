@@ -19,10 +19,6 @@ public class Main {
 			
 			List<Vertex> path = sp.getShortestPath(maze.arrivals.get(0));
 			
-			/*for(Vertex v : path) {
-				System.out.println(v.getLabel());
-			}*/
-			
 			maze.drawWithPath(path);
 			
 		} catch (MazeReadingException e) {
