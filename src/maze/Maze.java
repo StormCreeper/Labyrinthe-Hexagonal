@@ -94,21 +94,44 @@ public class Maze implements Graph, Distance{
 	public int getDistance(Vertex v1, Vertex v2) {
 		return 1;
 	}
-	
+	/**
+	 * Charge un labyrinthe depuis un fichier texte.
+	 * Format du fichier .maze :
+	 * 
+	 * WIDTH HEIGHT
+	 * #### ... ####
+	 * #### ... ####
+	 * ...      ....
+	 * #### ... ####
+	 * #### ... ####
+	 * 
+	 * où # représente une case du labyrinthe, les caractères correspondants aux types de cases sont décrits dans MazeBox.java
+	 * 
+	 * @param filename
+	 * @throws MazeReadingException
+	 */
 	public final void initFromTextFile(String filename) throws MazeReadingException {
 		try {
 			List<String> lines = Files.readAllLines(Paths.get(filename), StandardCharsets.UTF_8);
 			
-			if(lines.size() != height) {
+			// Lire la première ligne qui contient la taille du labyrinthe
+			
+			String[] wh = lines.get(0).split(" ");
+			width = Integer.parseInt(wh[0]);
+			height = Integer.parseInt(wh[1]);
+			
+			// Lire le contenu du labyrinthe
+			
+			if(lines.size() != height + 1) {
 				throw new MazeReadingException(filename, -1, "Wrong number of rows, expected " + height + ", got " + lines.size() + ".");
 			}
 			
 			for(int j=0; j<height; j++) {
-				if(lines.get(j).length() != width) {
-					throw new MazeReadingException(filename, j, "Wrong number of column, expected " + width + ", got " + lines.get(j).length() + ".");
+				if(lines.get(j+1).length() != width) {
+					throw new MazeReadingException(filename, j, "Wrong number of column at line " + j + ", expected " + width + ", got " + lines.get(j).length() + ".");
 				}
 				for(int i = 0; i<width; i++) {
-					switch (lines.get(j).charAt(i)) {
+					switch (lines.get(j + 1).charAt(i)) {
 					case MazeBox.wallChara:
 						boxes[i][j] = new WallBox(i, j, this);
 						break;
