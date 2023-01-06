@@ -8,6 +8,8 @@ import graph.ShortestPaths;
 import graph.Vertex;
 import maze.Maze;
 
+import ui.*;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -24,6 +26,8 @@ public class Main {
 		} catch (MazeReadingException e) {
 			e.printStackTrace();
 		}
+		
+		new Window(maze);
 	}
  
 }
