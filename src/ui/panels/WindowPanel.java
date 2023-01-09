@@ -14,9 +14,6 @@ public class WindowPanel extends JPanel {
 	private static final long serialVersionUID = -4761522094862460317L;
 
 	public WindowPanel(Window window) {
-		
-		
-		
 		setLayout(new BorderLayout());
 		
 		add(new MazePanel(window), BorderLayout.CENTER);

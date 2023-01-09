@@ -21,19 +21,14 @@ import graph.Vertex;
  */
 public class Maze implements Graph, Distance{
 	
-	private MazeBox[][] boxes;
+	public MazeBox[][] boxes;
 	private int width, height;
-	
-	public ArrayList<Vertex> arrivals;
-	public ArrayList<Vertex> departures;
 	
 	public Maze(int width, int height) {
 		this.width = width;
 		this.height = height;
 		
 		boxes = new MazeBox[width][height];
-		arrivals = new ArrayList<Vertex>();
-		departures = new ArrayList<Vertex>();
 	}
 	
 	/**
@@ -140,11 +135,9 @@ public class Maze implements Graph, Distance{
 						break;
 					case MazeBox.departureChara:
 						boxes[i][j] = new DepartureBox(i, j, this);
-						departures.add(boxes[i][j]);
 						break;
 					case MazeBox.arrivalChara:
 						boxes[i][j] = new ArrivalBox(i, j, this);
-						arrivals.add(boxes[i][j]);
 						break;
 					default:
 						throw new MazeReadingException(filename, j, "Unrecognized character : " + lines.get(j).charAt(i));
@@ -202,6 +195,51 @@ public class Maze implements Graph, Distance{
 		}
 		
 		System.out.print(String.valueOf(content));
+	}
+	
+	public void reset() {
+		for(int i = 0; i<width; i++) {
+			for(int j=0; j<height; j++) {
+				if(i == 0 && j == 0)  boxes[i][j] = new DepartureBox(i, j, this);
+				else if(i == width-1 && j == height-1)  boxes[i][j] = new ArrivalBox(i, j, this);
+				else boxes[i][j] = new EmptyBox(i, j, this);
+			}
+		}
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	public int getHeight() {
+		return height;
+	}
+	
+	public Vertex getArrival() {
+		for(int i = 0; i<width; i++) {
+			for(int j=0; j<height; j++) {
+				if(boxes[i][j].getChara() == MazeBox.arrivalChara) return boxes[i][j];
+			}
+		}
+		
+		return null;
+		
+	}
+	
+	public Vertex getDeparture() {
+		for(int i = 0; i<width; i++) {
+			for(int j=0; j<height; j++) {
+				if(boxes[i][j].getChara() == MazeBox.departureChara) return boxes[i][j];
+			}
+		}
+		
+		return null;
+	}
+	
+	public char getBox(int x, int y) {
+		if(x < 0 || x >= width) return ' ';
+		if(y < 0 || y >= width) return ' ';
+		
+		return boxes[x][y].getChara();
 	}
 
 }

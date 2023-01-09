@@ -10,10 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import ui.Window;
-import ui.buttons.EmptyButton;
-import ui.buttons.LoadButton;
-import ui.buttons.SaveButton;
-import ui.buttons.SolveButton;
 
 public class ToolsPanel extends JPanel {
 	
@@ -39,11 +35,32 @@ public class ToolsPanel extends JPanel {
 		add(solveButton = new JButton("Solve Maze"));
 		
 		emptyButton.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(e.getActionCommand());
+				window.getLaby().reset();
+				window.repaint();
 				
+			}
+		});
+		
+		loadButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				window.getLaby().load();
+				window.repaint();
+			}
+		});
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		solveButton.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				window.getLaby().solve();
+				window.repaint();
 			}
 		});
 	}

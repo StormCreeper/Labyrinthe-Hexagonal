@@ -4,7 +4,7 @@ import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
 
-import maze.Maze;
+import main.LabyrintheHexagonal;
 import ui.panels.WindowPanel;
 
 public class Window extends JFrame {
@@ -14,12 +14,12 @@ public class Window extends JFrame {
 	 */
 	private static final long serialVersionUID = -1157307886576199547L;
 	
-	private Maze maze;
+	private LabyrintheHexagonal laby;
 
-	public Window(Maze maze) throws HeadlessException {
+	public Window(LabyrintheHexagonal laby) throws HeadlessException {
 		super("Labyrinthe Hexagonal");
 		
-		this.maze = maze;
+		this.laby = laby;
 		
 		setContentPane(new WindowPanel(this));
 		
@@ -27,6 +27,10 @@ public class Window extends JFrame {
 		
 		pack();
 		setVisible(true);
+	}
+	
+	public LabyrintheHexagonal getLaby() {
+		return laby;
 	}
 
 }
