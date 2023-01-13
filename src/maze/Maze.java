@@ -42,7 +42,7 @@ public class Maze implements Graph, Distance{
 		if(i<0 || i >= width) return;
 		if(j<0 || j >= height) return;
 		
-		//if(boxes[i][j].getChara() != MazeBox.emptyChara) return;
+		if(boxes[i][j].getChara() == MazeBox.wallChara) return;
 		
 		vertices.add(boxes[i][j]);
 	}
@@ -205,6 +205,17 @@ public class Maze implements Graph, Distance{
 				else boxes[i][j] = new EmptyBox(i, j, this);
 			}
 		}
+	}
+	//TODO Change Mazebox to a single class with a character
+	public void setCell(int i, int j, char chara) {
+		if(i<0 || i >= width || j<0 || j>= height) return;
+		boxes[i][j] = new MazeBox(i, j, this) {
+			
+			@Override
+			public char getChara() {
+				return chara;
+			}
+		};
 	}
 	
 	public int getWidth() {

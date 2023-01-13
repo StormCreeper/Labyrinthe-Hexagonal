@@ -15,6 +15,7 @@ public abstract class MazeBox implements Vertex {
 	public static final char emptyChara = ' ';
 	public static final char departureChara = 'D';
 	public static final char arrivalChara = 'A';
+	public static final char invalidChara = 'X';
 	
 	// Référence au labyrinthe qui contient la case
 	protected Maze maze;
