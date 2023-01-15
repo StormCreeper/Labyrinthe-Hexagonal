@@ -10,7 +10,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
-
 import graph.Vertex;
 import maze.Maze;
 import maze.MazeBox;
@@ -29,10 +28,10 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	private char tool = MazeBox.wallChara;
 	
 	private double hexagonRatio = (float) Math.cos(Math.PI *(1/3.-1/2.));
+	private int padding = 10;
 	
 	public MazePanel(Window window) {
 		setPreferredSize(new Dimension(600, 600));
-		setBackground(Color.green);
 		
 		addMouseMotionListener(this);
 		addMouseListener(this);
@@ -40,33 +39,72 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		this.window = window;
 	}
 	
-	private Polygon getHexa(int i, int j) {
+	//Les coordonnées du coin haut-gauche calculés du labyrinthe pour l'affichage
+	private double resultX = 0;
+	private double resultY = 0;
+
+	//La taille du labyrinthe calculée pour l'affichage 
+	private double resultW = 0;
+	private double resultH = 0;
+	
+	private double radius = 0;
+	
+	/**
+	 * Calcule le rayon maximal de chaque hexagone tel que le labyrinthe total ne dépasse pas de la zone de dessin, en prenant en compte le padding.
+	 * Cette fonction calcule aussi la largeur, hauteur, ainsi que les coordonnées du coin haut-gauche du labyrinthe quand il est affiché avec ce rayon.
+	 */
+	private void recalculateMazeBounds() {
 		Maze maze = window.getLaby().getMaze();
 		
-		int w = maze.getWidth();
-		int h = maze.getHeight();
+		int mazeW = maze.getWidth();
+		int mazeH = maze.getHeight();
 		
-		double x = 50 + i * 500 / (double)w;
-		double y = 50 + j * 500 / (double)w * hexagonRatio;
-		if(j % 2 == 1) x += 250 / (double)w;
+		// Taille de la zone de dessin
+		int drawW = (getWidth() - 2 * padding);
+		int drawH = (getHeight() - 2 * padding);
 		
-		double centerX = x + 250 / (double)w;
-		double centerY = y + 250 / (double)h;
+		// Le rayon tel que le labyrinthe ait une largeur d'exactement drawW.
+		radius = drawW / ((mazeW + 0.5) * 2. * hexagonRatio);
 		
-		double r = 250 / (double) w / hexagonRatio;
+		// La hauteur qu'aurait le labyrinthe avec ce rayon.
+		double tmpH = radius * (1.5 * mazeH + 0.5);
+		
+		if(tmpH > drawH) {
+			// Le rayon tel que le labyrinthe ait une hauteur d'exactement drawH.
+			radius = drawH / (1.5 * mazeH + 0.5);
+		}
+		
+		// A partir de ce rayon optimal, on peut calculer le rectangle qui englobe le labyrinthe.
+		resultW = radius * hexagonRatio * (2 * mazeW + 1);
+		resultH = radius * (1.5 * mazeH + 0.5);
+		
+		resultX = padding + (drawW - resultW) / 2.;
+		resultY = padding + (drawH - resultH) / 2.;
+	}
+	
+	/**
+	 * Crée un hexagone de type java.awt.Polygon, de rayon radius, associé aux coordonnéees i et j.
+	 * 
+	 * @param i abcisse de l'hexagone.
+	 * @param j ordonnée de l'hexagone.
+	 * @return un Polygon représentant l'hexagone.
+	 */
+	private Polygon getHexa(int i, int j) {
+		double x = resultX + radius * (2 * i + 1 + j % 2) * hexagonRatio;
+		double y = resultY + radius * (1.5 * j + 1);
 		
 		int[] xpoints = new int[6];
 		int[] ypoints = new int[6];
 		
 		for(int k=0; k<6; k++) {
-			xpoints[k] = (int) (centerX + r * Math.cos(2 * k * Math.PI / 6. + Math.PI / 2.));
-			ypoints[k] = (int) (centerY + r * Math.sin(2 * k * Math.PI / 6. + Math.PI / 2.));
+			xpoints[k] = (int) Math.round(x + radius * Math.cos(2 * k * Math.PI / 6. + Math.PI / 2.));
+			ypoints[k] = (int) Math.round(y + radius * Math.sin(2 * k * Math.PI / 6. + Math.PI / 2.));
 		}
 		
 		return new Polygon(xpoints, ypoints, 6);
 	}
 	
-	private Color getColor(int i, int j) {
+	private Color getCellColor(int i, int j) {
 		Maze maze = window.getLaby().getMaze();
 		char c = maze.getBox(i, j);
 		if(c == MazeBox.emptyChara) return new Color(i/(float)maze.getWidth(), j/(float)maze.getHeight(), 1.0f);
@@ -75,6 +113,13 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		return Color.BLACK;
 	}
 	
+	/**
+	 * Fonction utilitaire permettant d'interpoler linéairement entre deux couleurs.
+	 * @param c1 première couleur.
+	 * @param c2 deuxième couleur.
+	 * @param t paramètre controlant la proportion de c2 dans la couleur résultante.
+	 * @return
+	 */
 	private Color mixColor(Color c1, Color c2, float t) {
 		return new Color(
 			(int)(c1.getRed() * (1-t) + c2.getRed() * t),
@@ -91,12 +136,13 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		
 		int w = maze.getWidth();
 		int h = maze.getHeight();
+		
+		recalculateMazeBounds();
 
 		for(int i=0; i<w; i++) {
 			for(int j=0; j<h; j++) {
-				g.setColor(getColor(i, j));
+				g.setColor(getCellColor(i, j));
 				g.fillPolygon(getHexa(i, j));
-			
 			}
 		}
 		
@@ -115,7 +161,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 			int i = selected.getI();
 			int j = selected.getJ();
 			
-			Color baseColor = getColor(i, j);
+			Color baseColor = getCellColor(i, j);
 			Color finalColor = mixColor(baseColor, Color.white, .4f);
 			
 			g.setColor(finalColor);
@@ -125,6 +171,13 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 			g.setColor(Color.black);
 			g.drawPolygon(hexa);
 		}
+		/*
+		g.setColor(Color.black);
+		g.drawRect((int)Math.round(resultX), (int)Math.round(resultY), (int)Math.round(resultW), (int)Math.round(resultH));
+
+		g.setColor(Color.red);
+		g.drawRect(padding, padding, getWidth() - padding * 2, getHeight() - padding * 2);
+		*/
 	}
 
 	private void changeCell() {
