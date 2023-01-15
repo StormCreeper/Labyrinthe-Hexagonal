@@ -157,6 +157,22 @@ public class Maze implements Graph, Distance{
 	}
 	
 	/**
+	 * Convertit le labyrinthe en une chaîne de charactère (dans le même format que pour l'enregistrement dans un fichier.
+	 */
+	@Override
+	public String toString() {
+		String content = "";
+		for(int j=0; j<height; j++) {
+			for(int i = 0; i<width; i++) {
+				content += boxes[i][j].getChara();
+			}
+			content += '\n';
+		}
+		
+		return content;
+	}
+	
+	/**
 	 * 
 	 * @param filename le nom du fichier dans lequel enregistrer le labyrinthe.
 	 */
@@ -173,22 +189,6 @@ public class Maze implements Graph, Distance{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Convertit le labyrinthe en une chaîne de charactère (dans le même format que pour l'enregistrement dans un fichier.
-	 */
-	@Override
-	public String toString() {
-		String content = "";
-		for(int j=0; j<height; j++) {
-			for(int i = 0; i<width; i++) {
-				content += boxes[i][j].getChara();
-			}
-			content += '\n';
-		}
-		
-		return content;
 	}
 	
 	/**

@@ -39,6 +39,7 @@ public class LabyrintheHexagonal {
 	public void solve() {
 		ShortestPaths sp = Dijkstra.dijkstra(maze, maze.getDeparture(), maze.getArrival(), maze);
 		path = sp.getShortestPath(maze.getArrival());
+		if(!path.get(0).equals(maze.getDeparture())) path = null;
 	}
 	
 	public Maze getMaze() {
