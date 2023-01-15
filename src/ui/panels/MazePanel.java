@@ -50,8 +50,6 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		double y = 50 + j * 500 / (double)w * hexagonRatio;
 		if(j % 2 == 1) x += 250 / (double)w;
 		
-		//g.fillRect((int)x, (int)y, 500/w, 500/h);
-		
 		double centerX = x + 250 / (double)w;
 		double centerY = y + 250 / (double)h;
 		
