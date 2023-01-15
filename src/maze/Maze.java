@@ -24,12 +24,15 @@ public class Maze implements Graph, Distance{
 	public MazeBox[][] boxes;
 	private int width, height;
 	
-	// Variable pour sécuriser le changement de taille du labyrinthe
-	private boolean whChanged = false;
+	// Variables pour sécuriser le changement de taille (le changement effectif ne se fait qu'au prochain reset du labyrinthe).
+	private int newWidth, newHeight;
 	
 	public Maze(int width, int height) {
 		this.width = width;
 		this.height = height;
+		
+		this.newHeight = height;
+		this.newWidth = width;
 		
 		boxes = new MazeBox[width][height];
 	}
@@ -206,9 +209,11 @@ public class Maze implements Graph, Distance{
 	
 	public void reset() {
 		// Si la taille du labyrinthe n'a pas changé, il ne sert à rien de recréer le tableau des cases.
-		if(whChanged) {
+		if(width != newWidth || height != newHeight) {
+			width = newWidth;
+			height = newHeight;
+			
 			boxes = new MazeBox[width][height];
-			whChanged = false;
 		}
 		
 		for(int i = 0; i<width; i++) {
@@ -264,10 +269,8 @@ public class Maze implements Graph, Distance{
 	}
 	
 	public void setWidthHeight(int width, int height) {
-		if(width != this.width || height != this.height) whChanged = true;
-		
-		this.width = width;
-		this.height = height;
+		this.newWidth = width;
+		this.newHeight = height;
 	}
 
 }
