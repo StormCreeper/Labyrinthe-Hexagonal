@@ -21,7 +21,6 @@ import ui.Window;
 public class ToolsPanel extends JPanel {
 	private static final long serialVersionUID = 4432571170375056548L;
 
-
 	private JButton emptyButton;
 	private JButton loadButton;
 	private JButton saveButton;
@@ -42,9 +41,9 @@ public class ToolsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				SpinnerNumberModel widthModel = new  SpinnerNumberModel(10, 2, 50, 1);
+				SpinnerNumberModel widthModel = new  SpinnerNumberModel(window.getLaby().getMaze().getWidth(), 2, 50, 1);
 				JSpinner widthSpinner = new JSpinner(widthModel);
-				SpinnerNumberModel heightModel = new  SpinnerNumberModel(10, 2, 50, 1);
+				SpinnerNumberModel heightModel = new  SpinnerNumberModel(window.getLaby().getMaze().getHeight(), 2, 50, 1);
 				JSpinner heightSpinner = new JSpinner(heightModel);
 				
 				final JComponent[] inputs = new JComponent[] {
@@ -60,7 +59,7 @@ public class ToolsPanel extends JPanel {
 					int width = (int) widthModel.getValue();
 					int height = (int) heightModel.getValue();
 					
-					window.getLaby().setSize(width, height);
+					window.getLaby().getMaze().setWidthHeight(width, height);
 					
 					window.getLaby().reset();
 					window.repaint();

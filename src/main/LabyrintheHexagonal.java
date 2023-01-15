@@ -36,10 +36,6 @@ public class LabyrintheHexagonal {
 		maze.saveToTextFile(filename);
 	}
 	
-	public void setSize(int width, int height) {
-		maze.setWidthHeight(width, height);
-	}
-	
 	public void solve() {
 		ShortestPaths sp = Dijkstra.dijkstra(maze, maze.getDeparture(), maze.getArrival(), maze);
 		path = sp.getShortestPath(maze.getArrival());

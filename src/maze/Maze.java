@@ -24,6 +24,7 @@ public class Maze implements Graph, Distance{
 	public MazeBox[][] boxes;
 	private int width, height;
 	
+	// Variable pour sécuriser le changement de taille du labyrinthe
 	private boolean whChanged = false;
 	
 	public Maze(int width, int height) {
@@ -111,11 +112,12 @@ public class Maze implements Graph, Distance{
 		try {
 			List<String> lines = Files.readAllLines(Paths.get(filename), StandardCharsets.UTF_8);
 			
-			// Lire la première ligne qui contient la taille du labyrinthe
+			// Lire la première ligne qui contient la taille du labyrinthe, puis réinitialiser le labyrinthe
 			
 			String[] wh = lines.get(0).split(" ");
-			width = Integer.parseInt(wh[0]);
-			height = Integer.parseInt(wh[1]);
+			setWidthHeight(Integer.parseInt(wh[0]), Integer.parseInt(wh[1]));
+			
+			reset();
 			
 			// Lire le contenu du labyrinthe
 			
@@ -203,6 +205,7 @@ public class Maze implements Graph, Distance{
 	}
 	
 	public void reset() {
+		// Si la taille du labyrinthe n'a pas changé, il ne sert à rien de recréer le tableau des cases.
 		if(whChanged) {
 			boxes = new MazeBox[width][height];
 			whChanged = false;
@@ -241,9 +244,7 @@ public class Maze implements Graph, Distance{
 				if(boxes[i][j].getChara() == MazeBox.arrivalChara) return boxes[i][j];
 			}
 		}
-		
 		return null;
-		
 	}
 	
 	public Vertex getDeparture() {
@@ -252,7 +253,6 @@ public class Maze implements Graph, Distance{
 				if(boxes[i][j].getChara() == MazeBox.departureChara) return boxes[i][j];
 			}
 		}
-		
 		return null;
 	}
 	
@@ -264,10 +264,10 @@ public class Maze implements Graph, Distance{
 	}
 	
 	public void setWidthHeight(int width, int height) {
+		if(width != this.width || height != this.height) whChanged = true;
+		
 		this.width = width;
 		this.height = height;
-		
-		whChanged = true;
 	}
 
 }

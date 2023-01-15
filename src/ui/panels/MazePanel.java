@@ -28,6 +28,8 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	private MazeBox selected = null;
 	private char tool = MazeBox.wallChara;
 	
+	private double hexagonRatio = (float) Math.cos(Math.PI *(1/3.-1/2.));
+	
 	public MazePanel(Window window) {
 		setPreferredSize(new Dimension(600, 600));
 		setBackground(Color.green);
@@ -44,23 +46,23 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		int w = maze.getWidth();
 		int h = maze.getHeight();
 		
-		float x = 50 + i * 500.f / (float)w;
-		float y = (float) (50 + j * 500.f / (float)w * Math.cos(Math.PI *(1/3.-1/2.)));
-		if(j % 2 == 1) x += 250 / w;
+		double x = 50 + i * 500 / (double)w;
+		double y = 50 + j * 500 / (double)w * hexagonRatio;
+		if(j % 2 == 1) x += 250 / (double)w;
 		
 		//g.fillRect((int)x, (int)y, 500/w, 500/h);
 		
-		float centerX = x + 250 / w;
-		float centerY = y + 250 / h;
+		double centerX = x + 250 / (double)w;
+		double centerY = y + 250 / (double)h;
 		
-		double r = 250 / (float) w / Math.cos(Math.PI *(1/3.-1/2.));
+		double r = 250 / (double) w / hexagonRatio;
 		
 		int[] xpoints = new int[6];
 		int[] ypoints = new int[6];
 		
 		for(int k=0; k<6; k++) {
-			xpoints[k] = (int) (centerX + r * Math.cos(2 * k * Math.PI / 6.0 + Math.PI / 2.0));
-			ypoints[k] = (int) (centerY + r * Math.sin(2 * k * Math.PI / 6.0 + Math.PI / 2.0));
+			xpoints[k] = (int) (centerX + r * Math.cos(2 * k * Math.PI / 6. + Math.PI / 2.));
+			ypoints[k] = (int) (centerY + r * Math.sin(2 * k * Math.PI / 6. + Math.PI / 2.));
 		}
 		
 		return new Polygon(xpoints, ypoints, 6);
