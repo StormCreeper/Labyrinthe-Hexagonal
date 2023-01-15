@@ -24,6 +24,8 @@ public class Maze implements Graph, Distance{
 	public MazeBox[][] boxes;
 	private int width, height;
 	
+	private boolean whChanged = false;
+	
 	public Maze(int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -157,6 +159,9 @@ public class Maze implements Graph, Distance{
 		// Ecrit le contenu du fichier dans une chaîne de caractère 
 		String content = toString();
 		
+		// Ajoute les données de taille du labyrinthe
+		content = width + " " + height + "\n" + content;
+		
 		// Puis écrit tout d'un seul coup dans le fichier
 		try {
 			Files.write(Paths.get(filename), content.getBytes());
@@ -198,6 +203,11 @@ public class Maze implements Graph, Distance{
 	}
 	
 	public void reset() {
+		if(whChanged) {
+			boxes = new MazeBox[width][height];
+			whChanged = false;
+		}
+		
 		for(int i = 0; i<width; i++) {
 			for(int j=0; j<height; j++) {
 				if(i == 0 && j == 0)  boxes[i][j] = new DepartureBox(i, j, this);
@@ -251,6 +261,13 @@ public class Maze implements Graph, Distance{
 		if(y < 0 || y >= width) return ' ';
 		
 		return boxes[x][y].getChara();
+	}
+	
+	public void setWidthHeight(int width, int height) {
+		this.width = width;
+		this.height = height;
+		
+		whChanged = true;
 	}
 
 }

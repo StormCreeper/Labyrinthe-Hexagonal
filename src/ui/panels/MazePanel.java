@@ -135,8 +135,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		int j = selected.getJ();
 
 		window.getLaby().getMaze().setCell(i, j, tool);
-		
-		window.getLaby().solve();
+		window.getLaby().path = null;
 	}
 	
 	private void selectCell(int mouseX, int mouseY) {

@@ -24,13 +24,20 @@ public class LabyrintheHexagonal {
 		maze.reset();
 		path = null;
 	}
-	public void load() {
+	public void load(String filename) {
 		try {
-			maze.initFromTextFile("data/labyrinthe.maze");
+			maze.initFromTextFile(filename);
 			path = null;
 		} catch (MazeReadingException e) {
 			e.printStackTrace();
 		}
+	}
+	public void save(String filename) {
+		maze.saveToTextFile(filename);
+	}
+	
+	public void setSize(int width, int height) {
+		maze.setWidthHeight(width, height);
 	}
 	
 	public void solve() {
