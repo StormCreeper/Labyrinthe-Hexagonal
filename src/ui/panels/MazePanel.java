@@ -25,6 +25,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	private Window window;
 	
 	private MazeBox selected = null;
+	private MazeBox lastSelected = null;
 	private char tool = MazeBox.wallChara;
 	
 	private double hexagonRatio = (float) Math.cos(Math.PI *(1/3.-1/2.));
@@ -128,6 +129,23 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		);
 	}
 	
+	private void highlight(MazeBox box, Color color, Graphics g) {
+		if(box != null) {
+			int i = box.getI();
+			int j = box.getJ();
+			
+			Color baseColor = getCellColor(i, j);
+			Color finalColor = mixColor(baseColor, color, .4f);
+			
+			g.setColor(finalColor);
+			
+			Polygon hexa = getHexa(i, j);
+			g.fillPolygon(hexa);
+			g.setColor(Color.black);
+			g.drawPolygon(hexa);
+		}
+	}
+	
 	@Override
 	public final void paintComponent(Graphics g) {
 		g.clearRect(0, 0, getWidth(), getHeight());
@@ -157,20 +175,8 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 			}
 		}
 		
-		if(selected != null) {
-			int i = selected.getI();
-			int j = selected.getJ();
-			
-			Color baseColor = getCellColor(i, j);
-			Color finalColor = mixColor(baseColor, Color.white, .4f);
-			
-			g.setColor(finalColor);
-			
-			Polygon hexa = getHexa(i, j);
-			g.fillPolygon(hexa);
-			g.setColor(Color.black);
-			g.drawPolygon(hexa);
-		}
+		highlight(selected, Color.white, g);
+		highlight(lastSelected, Color.red, g);
 		/*
 		g.setColor(Color.black);
 		g.drawRect((int)Math.round(resultX), (int)Math.round(resultY), (int)Math.round(resultW), (int)Math.round(resultH));
@@ -180,15 +186,22 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		*/
 	}
 
-	private void changeCell() {
-		if(tool == MazeBox.invalidChara) return;
-		if(selected == null) return;
+	private boolean changeCell() {
+		if(selected == null) return false;
 		
 		int i = selected.getI();
 		int j = selected.getJ();
+		
+		return changeCell(i, j, tool);
+	}
+	
+	private boolean changeCell(int i, int j, char tool) {
+		if(tool == MazeBox.invalidChara) return false;
 
 		window.getLaby().getMaze().setCell(i, j, tool);
 		window.getLaby().path = null;
+		
+		return true;
 	}
 	
 	private void selectCell(int mouseX, int mouseY) {
@@ -205,18 +218,18 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		selectCell(e.getX(), e.getY());
-		changeCell();
+		if(tool != MazeBox.arrivalChara && tool != MazeBox.departureChara
+				&& selected != null
+				&& selected.getChara() != MazeBox.arrivalChara
+				&& selected.getChara() != MazeBox.departureChara)
+			changeCell();
 		repaint();
 	}
-
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		selectCell(e.getX(), e.getY());
 		repaint();
 	}
-	
-	
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		
@@ -227,32 +240,41 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		selectCell(e.getX(), e.getY());
 		if(selected == null) return;
 		
-		switch(selected.getChara()) {
-		case MazeBox.arrivalChara:
-		case MazeBox.departureChara:
-			tool = MazeBox.invalidChara;
-			break;
-		case MazeBox.emptyChara:
-			tool = MazeBox.wallChara;
-			break;
-		case MazeBox.wallChara:
-			tool = MazeBox.emptyChara;
-			break;
-		}
+		if(tool == MazeBox.arrivalChara || tool == MazeBox.departureChara) {
+			if(selected.getChara() != MazeBox.arrivalChara && selected.getChara() != MazeBox.departureChara && changeCell()) {
+				changeCell(lastSelected.getI(), lastSelected.getJ(), MazeBox.emptyChara);
+				tool = MazeBox.emptyChara;
+				lastSelected = null;
+			}
+		} else {
 		
-		changeCell();
+			switch(selected.getChara()) {
+			case MazeBox.arrivalChara:
+			case MazeBox.departureChara:
+				tool = selected.getChara();
+				lastSelected = selected;
+				break;
+			case MazeBox.emptyChara:
+				tool = MazeBox.wallChara;
+				changeCell();
+				break;
+			case MazeBox.wallChara:
+				tool = MazeBox.emptyChara;
+				changeCell();
+				break;
+			}
+			
+		}
 		repaint();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
-
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		
 	}
-
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
