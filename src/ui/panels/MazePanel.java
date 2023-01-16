@@ -8,6 +8,7 @@ import java.awt.Polygon;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.List;
 
 import javax.swing.JPanel;
 import graph.Vertex;
@@ -163,10 +164,11 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 				g.fillPolygon(getHexa(i, j));
 			}
 		}
-		
-		if(window.getLaby().path != null) {
-			for(Vertex v : window.getLaby().path) {
-				MazeBox m = (MazeBox)v;
+		List<Vertex> path = window.getLaby().path;
+		if(path != null) {
+			for(int i = 0; i<path.size() && i < cellIndex; i++) {
+				//for(Vertex v : window.getLaby().path) {
+				MazeBox m = (MazeBox)path.get(i);
 				
 				if(m.getChara() != MazeBox.emptyChara) continue;
 				
@@ -213,6 +215,14 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 				if(getHexa(i, j).contains(new Point(mouseX, mouseY))) selected = maze.boxes[i][j];
 			}
 		}
+	}
+	
+	private int cellIndex = 0;
+	
+	public void tick() {
+		cellIndex++;
+		if(window.getLaby().path == null) cellIndex = 0;
+		repaint();
 	}
 	
 	@Override

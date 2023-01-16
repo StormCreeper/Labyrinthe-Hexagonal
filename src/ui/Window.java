@@ -10,6 +10,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import main.LabyrintheHexagonal;
 import ui.panels.WindowPanel;
@@ -22,13 +23,15 @@ public class Window extends JFrame {
 	private static final long serialVersionUID = -1157307886576199547L;
 	
 	private LabyrintheHexagonal laby;
+	
+	WindowPanel wp;
 
 	public Window(LabyrintheHexagonal laby) throws HeadlessException {
 		super("Labyrinthe Hexagonal");
 		
 		this.laby = laby;
 		
-		setContentPane(new WindowPanel(this));
+		setContentPane(wp = new WindowPanel(this));
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -66,6 +69,22 @@ public class Window extends JFrame {
 		
 		pack();
 		setVisible(true);
+		
+		ActionListener task = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tick();
+			}
+		};
+		
+		Timer timer = new Timer(25, task);
+		timer.setRepeats(true);
+		timer.start();
+	}
+	
+	public void tick() {
+		wp.tick();
 	}
 	
 	public LabyrintheHexagonal getLaby() {
