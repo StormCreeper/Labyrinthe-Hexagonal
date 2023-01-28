@@ -5,96 +5,47 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
-
-import ui.Window;
+import ui.MazeWindow;
+import ui.buttons.MazeButton;
 
 public class ToolsPanel extends JPanel {
 	private static final long serialVersionUID = 4432571170375056548L;
 
-	private JButton emptyButton;
-	private JButton loadButton;
-	private JButton saveButton;
-	private JButton solveButton;
+	private MazeButton emptyButton;
+	private MazeButton loadButton;
+	private MazeButton saveButton;
+	private MazeButton solveButton;
 	
-	public ToolsPanel(Window window) {
+	public ToolsPanel(MazeWindow window) {
+		
 		setLayout(new GridLayout(4, 1));
 		
 		setPreferredSize(new Dimension(200, 600));
 		setBackground(Color.red);
 		
-		add(emptyButton = new JButton("Empty Maze"));
-		add(loadButton = new JButton("Load Maze"));
-		add(saveButton = new JButton("Save Maze"));
-		add(solveButton = new JButton("Solve Maze"));
+		add(emptyButton = new MazeButton(window, "Empty Maze"));
+		add(loadButton = new MazeButton(window, "Load Maze"));
+		add(saveButton = new MazeButton(window, "Save Maze"));
+		add(solveButton = new MazeButton(window, "Solve Maze"));
 		
 		emptyButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				SpinnerNumberModel widthModel = new  SpinnerNumberModel(window.getLaby().getMaze().getWidth(), 2, 50, 1);
-				JSpinner widthSpinner = new JSpinner(widthModel);
-				SpinnerNumberModel heightModel = new  SpinnerNumberModel(window.getLaby().getMaze().getHeight(), 2, 50, 1);
-				JSpinner heightSpinner = new JSpinner(heightModel);
-				
-				final JComponent[] inputs = new JComponent[] {
-					new JLabel("Width"),
-					widthSpinner,
-					new JLabel("Height"),
-					heightSpinner
-				};
-				
-				int result = JOptionPane.showConfirmDialog(window, inputs, "Custom dialog", JOptionPane.PLAIN_MESSAGE);
-				
-				if(result == JOptionPane.OK_OPTION) {
-					int width = (int) widthModel.getValue();
-					int height = (int) heightModel.getValue();
-					
-					window.getLaby().getMaze().setWidthHeight(width, height);
-					
-					window.getLaby().reset();
-					window.repaint();
-				} else {
-					System.out.println("Refused blank");
-				}
+				window.showChooseSizeDialog();
 			}
 		});
 		
 		loadButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser(new File("data"));
-				int returnVal = fc.showOpenDialog(window);
-				if(returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
-					window.getLaby().load(file.getPath());
-					window.repaint();
-				} else {
-					System.out.println("File dialog declined");
-				}
+				window.showLoadDialog();
 			}
 		});
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser(new File("data"));
-				int returnVal = fc.showSaveDialog(window);
-				if(returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
-					window.getLaby().save(file.getPath());
-					window.repaint();
-				} else {
-					System.out.println("File dialog declined");
-				}
+				window.showSaveDialog();
 			}
 		});
 		solveButton.addActionListener(new ActionListener() {	
@@ -105,5 +56,9 @@ public class ToolsPanel extends JPanel {
 			}
 		});
 	}
+	
+	
+	
+	
 
 }

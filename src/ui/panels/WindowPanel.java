@@ -4,26 +4,31 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-import ui.Window;
+import ui.MazeWindow;
 
 public class WindowPanel extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4761522094862460317L;
 	
-	private MazePanel mp;
+	private MazePanel mazePanel;
+	private ToolsPanel toolsPanel;
 
-	public WindowPanel(Window window) {
+	public WindowPanel(MazeWindow window) {
 		setLayout(new BorderLayout());
 		
-		add(mp = new MazePanel(window), BorderLayout.CENTER);
-		add(new ToolsPanel(window), BorderLayout.EAST);
+		add(mazePanel = new MazePanel(window), BorderLayout.CENTER);
+		add(toolsPanel = new ToolsPanel(window), BorderLayout.EAST);
 	}
 	
 	public void tick() {
-		mp.tick();
+		mazePanel.tick();
+	}
+	
+	public ToolsPanel getToolsPanel() {
+		return toolsPanel;
+	}
+	public MazePanel getMazePanel() {
+		return mazePanel;
 	}
 
 }

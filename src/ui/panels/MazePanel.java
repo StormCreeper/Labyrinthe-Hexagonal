@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import graph.Vertex;
 import maze.Maze;
 import maze.MazeBox;
-import ui.Window;
+import ui.MazeWindow;
 
 public class MazePanel extends JPanel implements MouseMotionListener, MouseListener {
 
@@ -23,7 +23,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	 */
 	private static final long serialVersionUID = 3038870474473344877L;
 
-	private Window window;
+	private MazeWindow window;
 	
 	private MazeBox selected = null;
 	private MazeBox lastSelected = null;
@@ -32,7 +32,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	private double hexagonRatio = (float) Math.cos(Math.PI *(1/3.-1/2.));
 	private int padding = 10;
 	
-	public MazePanel(Window window) {
+	public MazePanel(MazeWindow window) {
 		setPreferredSize(new Dimension(600, 600));
 		
 		addMouseMotionListener(this);
@@ -110,8 +110,8 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		Maze maze = window.getLaby().getMaze();
 		char c = maze.getBox(i, j);
 		if(c == MazeBox.emptyChara) return new Color(i/(float)maze.getWidth(), j/(float)maze.getHeight(), 1.0f);
-		if(c == MazeBox.arrivalChara) return Color.CYAN;
-		if(c == MazeBox.departureChara) return Color.YELLOW;
+		if(c == MazeBox.arrivalChara) return Color.GREEN;
+		if(c == MazeBox.departureChara) return Color.RED;
 		return Color.BLACK;
 	}
 	
@@ -172,7 +172,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 				
 				if(m.getChara() != MazeBox.emptyChara) continue;
 				
-				g.setColor(Color.GREEN);
+				g.setColor(Color.YELLOW);
 				g.fillPolygon(getHexa(m.getI(), m.getJ()));
 			}
 		}

@@ -1,17 +1,13 @@
 package main;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
-
-import javax.swing.Timer;
 
 import exceptions.MazeReadingException;
 import graph.Dijkstra;
 import graph.ShortestPaths;
 import graph.Vertex;
 import maze.Maze;
-import ui.Window;
+import ui.MazeWindow;
 
 public class LabyrintheHexagonal {
 	
@@ -22,7 +18,7 @@ public class LabyrintheHexagonal {
 		maze = new Maze(10, 10);
 		maze.reset();
 		
-		new Window(this);
+		new MazeWindow(this);
 	}
 	public void reset() {
 		maze.reset();
