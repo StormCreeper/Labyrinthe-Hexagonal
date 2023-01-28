@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
+import javax.swing.WindowConstants;
 
 import main.LabyrintheHexagonal;
 import ui.panels.WindowPanel;
@@ -40,7 +41,7 @@ public class MazeWindow extends JFrame {
 		
 		setContentPane(wp = new WindowPanel(this));
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			@Override
 		    public void windowClosing(WindowEvent event) {
@@ -82,19 +83,20 @@ public class MazeWindow extends JFrame {
 	}
 	
 	public boolean showQuitDialog() {
-		int response = JOptionPane.showInternalOptionDialog(null, "Maze not saved. Save it ?", "Quit app", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
-		switch(response) {
-		case JOptionPane.CANCEL_OPTION:
-			System.out.println("CANCEL");
-			return false;
-		case JOptionPane.OK_OPTION:
-			System.out.println("OK");
-			return showSaveDialog();
-		case JOptionPane.NO_OPTION:
-			System.out.println("NO");
-			return true;
+		if(laby.getMaze().isModified()) {
+			int response = JOptionPane.showInternalOptionDialog(null, "Maze not saved. Save it ?", "Quit app", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+			switch(response) {
+			case JOptionPane.CANCEL_OPTION:
+				return false;
+			case JOptionPane.OK_OPTION:
+				return showSaveDialog();
+			case JOptionPane.NO_OPTION:
+				return true;
+			case JOptionPane.CLOSED_OPTION:
+				return false;
+			}
 		}
-		return false;
+		return true;
 	}
 	
 	public boolean showChooseSizeDialog() {

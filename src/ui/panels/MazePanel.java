@@ -162,6 +162,8 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 			for(int j=0; j<h; j++) {
 				g.setColor(getCellColor(i, j));
 				g.fillPolygon(getHexa(i, j));
+				g.setColor(Color.black);
+				g.drawPolygon(getHexa(i, j));
 			}
 		}
 		List<Vertex> path = window.getLaby().path;

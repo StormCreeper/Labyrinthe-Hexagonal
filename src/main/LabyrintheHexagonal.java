@@ -14,9 +14,17 @@ public class LabyrintheHexagonal {
 	private Maze maze;
 	public List<Vertex> path;
 
-	public LabyrintheHexagonal() {
+	public LabyrintheHexagonal(String[] args) {
 		maze = new Maze(10, 10);
 		maze.reset();
+		
+		if(args.length > 0) {
+			try {
+				maze.initFromTextFile(args[0]);
+			} catch (MazeReadingException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		new MazeWindow(this);
 	}

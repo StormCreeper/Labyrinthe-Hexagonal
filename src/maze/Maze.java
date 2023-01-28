@@ -27,6 +27,8 @@ public class Maze implements Graph, Distance{
 	// Variables pour sécuriser le changement de taille (le changement effectif ne se fait qu'au prochain reset du labyrinthe).
 	private int newWidth, newHeight;
 	
+	private boolean hasBeenModified = false;
+	
 	public Maze(int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -151,6 +153,8 @@ public class Maze implements Graph, Distance{
 					}
 				}
 			}
+			
+			hasBeenModified = false;
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -186,6 +190,8 @@ public class Maze implements Graph, Distance{
 		// Puis écrit tout d'un seul coup dans le fichier
 		try {
 			Files.write(Paths.get(filename), content.getBytes());
+			
+			hasBeenModified = false;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -223,6 +229,8 @@ public class Maze implements Graph, Distance{
 				else boxes[i][j] = new EmptyBox(i, j, this);
 			}
 		}
+		
+		hasBeenModified = false;
 	}
 	//TODO Change Mazebox to a single class with a character
 	public void setCell(int i, int j, char chara) {
@@ -234,6 +242,8 @@ public class Maze implements Graph, Distance{
 				return chara;
 			}
 		};
+		
+		hasBeenModified = true;
 	}
 	
 	public int getWidth() {
@@ -271,6 +281,10 @@ public class Maze implements Graph, Distance{
 	public void setWidthHeight(int width, int height) {
 		this.newWidth = width;
 		this.newHeight = height;
+	}
+	
+	public boolean isModified() {
+		return hasBeenModified;
 	}
 
 }
