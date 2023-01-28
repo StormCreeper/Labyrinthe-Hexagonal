@@ -21,19 +21,22 @@ import graph.Vertex;
  */
 public class Maze implements Graph, Distance{
 	
-	private MazeBox[][] boxes;
+	public MazeBox[][] boxes;
 	private int width, height;
 	
-	public ArrayList<Vertex> arrivals;
-	public ArrayList<Vertex> departures;
+	// Variables pour sécuriser le changement de taille (le changement effectif ne se fait qu'au prochain reset du labyrinthe).
+	private int newWidth, newHeight;
+	
+	private boolean hasBeenModified = false;
 	
 	public Maze(int width, int height) {
 		this.width = width;
 		this.height = height;
 		
+		this.newHeight = height;
+		this.newWidth = width;
+		
 		boxes = new MazeBox[width][height];
-		arrivals = new ArrayList<Vertex>();
-		departures = new ArrayList<Vertex>();
 	}
 	
 	/**
@@ -47,7 +50,7 @@ public class Maze implements Graph, Distance{
 		if(i<0 || i >= width) return;
 		if(j<0 || j >= height) return;
 		
-		//if(boxes[i][j].getChara() != MazeBox.emptyChara) return;
+		if(boxes[i][j].getChara() == MazeBox.wallChara) return;
 		
 		vertices.add(boxes[i][j]);
 	}
@@ -114,11 +117,12 @@ public class Maze implements Graph, Distance{
 		try {
 			List<String> lines = Files.readAllLines(Paths.get(filename), StandardCharsets.UTF_8);
 			
-			// Lire la première ligne qui contient la taille du labyrinthe
+			// Lire la première ligne qui contient la taille du labyrinthe, puis réinitialiser le labyrinthe
 			
 			String[] wh = lines.get(0).split(" ");
-			width = Integer.parseInt(wh[0]);
-			height = Integer.parseInt(wh[1]);
+			setWidthHeight(Integer.parseInt(wh[0]), Integer.parseInt(wh[1]));
+			
+			reset();
 			
 			// Lire le contenu du labyrinthe
 			
@@ -140,34 +144,18 @@ public class Maze implements Graph, Distance{
 						break;
 					case MazeBox.departureChara:
 						boxes[i][j] = new DepartureBox(i, j, this);
-						departures.add(boxes[i][j]);
 						break;
 					case MazeBox.arrivalChara:
 						boxes[i][j] = new ArrivalBox(i, j, this);
-						arrivals.add(boxes[i][j]);
 						break;
 					default:
 						throw new MazeReadingException(filename, j, "Unrecognized character : " + lines.get(j).charAt(i));
 					}
 				}
 			}
+			
+			hasBeenModified = false;
 		} catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * 
-	 * @param filename le nom du fichier dans lequel enregistrer le labyrinthe.
-	 */
-	public final void saveToTextFile(String filename) {
-		// Ecrit le contenu du fichier dans une chaîne de caractère 
-		String content = toString();
-		
-		// Puis écrit tout d'un seul coup dans le fichier
-		try {
-			Files.write(Paths.get(filename), content.getBytes());
-		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -189,6 +177,27 @@ public class Maze implements Graph, Distance{
 	}
 	
 	/**
+	 * 
+	 * @param filename le nom du fichier dans lequel enregistrer le labyrinthe.
+	 */
+	public final void saveToTextFile(String filename) {
+		// Ecrit le contenu du fichier dans une chaîne de caractère 
+		String content = toString();
+		
+		// Ajoute les données de taille du labyrinthe
+		content = width + " " + height + "\n" + content;
+		
+		// Puis écrit tout d'un seul coup dans le fichier
+		try {
+			Files.write(Paths.get(filename), content.getBytes());
+			
+			hasBeenModified = false;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Affiche le labyrinthe en marquant d'un "x" les cases du chemin donné en paramètre/
 	 * @param vertices le chemin à afficher
 	 */
@@ -202,6 +211,80 @@ public class Maze implements Graph, Distance{
 		}
 		
 		System.out.print(String.valueOf(content));
+	}
+	
+	public void reset() {
+		// Si la taille du labyrinthe n'a pas changé, il ne sert à rien de recréer le tableau des cases.
+		if(width != newWidth || height != newHeight) {
+			width = newWidth;
+			height = newHeight;
+			
+			boxes = new MazeBox[width][height];
+		}
+		
+		for(int i = 0; i<width; i++) {
+			for(int j=0; j<height; j++) {
+				if(i == 0 && j == 0)  boxes[i][j] = new DepartureBox(i, j, this);
+				else if(i == width-1 && j == height-1)  boxes[i][j] = new ArrivalBox(i, j, this);
+				else boxes[i][j] = new EmptyBox(i, j, this);
+			}
+		}
+		
+		hasBeenModified = false;
+	}
+	//TODO Change Mazebox to a single class with a character
+	public void setCell(int i, int j, char chara) {
+		if(i<0 || i >= width || j<0 || j>= height) return;
+		boxes[i][j] = new MazeBox(i, j, this) {
+			
+			@Override
+			public char getChara() {
+				return chara;
+			}
+		};
+		
+		hasBeenModified = true;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	public int getHeight() {
+		return height;
+	}
+	
+	public Vertex getArrival() {
+		for(int i = 0; i<width; i++) {
+			for(int j=0; j<height; j++) {
+				if(boxes[i][j].getChara() == MazeBox.arrivalChara) return boxes[i][j];
+			}
+		}
+		return null;
+	}
+	
+	public Vertex getDeparture() {
+		for(int i = 0; i<width; i++) {
+			for(int j=0; j<height; j++) {
+				if(boxes[i][j].getChara() == MazeBox.departureChara) return boxes[i][j];
+			}
+		}
+		return null;
+	}
+	
+	public char getBox(int x, int y) {
+		if(x < 0 || x >= width) return ' ';
+		if(y < 0 || y >= width) return ' ';
+		
+		return boxes[x][y].getChara();
+	}
+	
+	public void setWidthHeight(int width, int height) {
+		this.newWidth = width;
+		this.newHeight = height;
+	}
+	
+	public boolean isModified() {
+		return hasBeenModified;
 	}
 
 }
