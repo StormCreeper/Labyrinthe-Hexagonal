@@ -1,5 +1,7 @@
 package maze;
 
+import java.awt.Color;
+
 /**
  * Classe représentant une case pleine du labyrinthe
  * 
@@ -15,6 +17,11 @@ public class WallBox extends MazeBox {
 	@Override
 	public char getChara() {
 		return MazeBox.wallChara;
+	}
+
+	@Override
+	public Color getColor() {
+		return Color.BLACK;
 	}
 
 }

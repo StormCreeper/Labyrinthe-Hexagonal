@@ -1,5 +1,7 @@
 package maze;
 
+import java.awt.Color;
+
 import graph.Vertex;
 
 
@@ -26,6 +28,26 @@ public abstract class MazeBox implements Vertex {
 
 	
 	public abstract char getChara();
+	public abstract Color getColor();
+	
+	public static MazeBox createMazeBox(int i, int j, char chara, Maze maze) {
+		switch(chara) {
+		case wallChara:
+			return new WallBox(i, j, maze);
+		case emptyChara:
+			return new EmptyBox(i, j, maze);
+		case departureChara:
+			return new DepartureBox(i, j, maze);
+		case arrivalChara:
+			return new ArrivalBox(i, j, maze);
+		default:
+			return new MazeBox(i, j, maze) {
+				public Color getColor() { return Color.PINK; }
+				public char getChara() { return invalidChara; }
+			};
+		}
+		
+	}
 	
 	public MazeBox(int i, int j, Maze maze) {
 		this.i = i;

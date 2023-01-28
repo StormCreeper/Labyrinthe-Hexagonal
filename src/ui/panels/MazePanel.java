@@ -107,12 +107,10 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	private Color getCellColor(int i, int j) {
-		Maze maze = window.getLaby().getMaze();
-		char c = maze.getBox(i, j);
-		if(c == MazeBox.emptyChara) return new Color(i/(float)maze.getWidth(), j/(float)maze.getHeight(), 1.0f);
-		if(c == MazeBox.arrivalChara) return Color.GREEN;
-		if(c == MazeBox.departureChara) return Color.RED;
-		return Color.BLACK;
+		Color color = window.getLaby().getMaze().getBox(i, j).getColor();
+		if(color == null) return Color.PINK;
+		
+		return color;
 	}
 	
 	/**

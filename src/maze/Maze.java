@@ -135,22 +135,9 @@ public class Maze implements Graph, Distance{
 					throw new MazeReadingException(filename, j, "Wrong number of column at line " + j + ", expected " + width + ", got " + lines.get(j).length() + ".");
 				}
 				for(int i = 0; i<width; i++) {
-					switch (lines.get(j + 1).charAt(i)) {
-					case MazeBox.wallChara:
-						boxes[i][j] = new WallBox(i, j, this);
-						break;
-					case MazeBox.emptyChara:
-						boxes[i][j] = new EmptyBox(i, j, this);
-						break;
-					case MazeBox.departureChara:
-						boxes[i][j] = new DepartureBox(i, j, this);
-						break;
-					case MazeBox.arrivalChara:
-						boxes[i][j] = new ArrivalBox(i, j, this);
-						break;
-					default:
+					boxes[i][j] = MazeBox.createMazeBox(i, j, lines.get(j + 1).charAt(i), this);
+					if(boxes[i][j].getChara() == MazeBox.invalidChara)
 						throw new MazeReadingException(filename, j, "Unrecognized character : " + lines.get(j).charAt(i));
-					}
 				}
 			}
 			
@@ -235,14 +222,7 @@ public class Maze implements Graph, Distance{
 	//TODO Change Mazebox to a single class with a character
 	public void setCell(int i, int j, char chara) {
 		if(i<0 || i >= width || j<0 || j>= height) return;
-		boxes[i][j] = new MazeBox(i, j, this) {
-			
-			@Override
-			public char getChara() {
-				return chara;
-			}
-		};
-		
+		boxes[i][j] = MazeBox.createMazeBox(i, j, chara, this);		
 		hasBeenModified = true;
 	}
 	
@@ -271,11 +251,11 @@ public class Maze implements Graph, Distance{
 		return null;
 	}
 	
-	public char getBox(int x, int y) {
-		if(x < 0 || x >= width) return ' ';
-		if(y < 0 || y >= width) return ' ';
+	public MazeBox getBox(int x, int y) {
+		if(x < 0 || x >= width) return null;
+		if(y < 0 || y >= width) return null;
 		
-		return boxes[x][y].getChara();
+		return boxes[x][y];
 	}
 	
 	public void setWidthHeight(int width, int height) {
