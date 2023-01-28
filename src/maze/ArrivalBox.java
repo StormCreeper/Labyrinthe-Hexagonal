@@ -1,5 +1,7 @@
 package maze;
 
+import java.awt.Color;
+
 /**
  * Classe représentant une case d'arrivée du labyrinthe
  * 
@@ -17,4 +19,10 @@ public class ArrivalBox extends MazeBox {
 		return MazeBox.arrivalChara;
 	}
 
+	@Override
+	public Color getColor() {
+		return Color.GREEN;
+	}
+	
+	
 }

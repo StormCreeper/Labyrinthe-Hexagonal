@@ -1,5 +1,7 @@
 package maze;
 
+import java.awt.Color;
+
 /**
  * Classe représentant une case de départ du labyrinthe
  * 
@@ -15,6 +17,11 @@ public class DepartureBox extends MazeBox {
 	@Override
 	public char getChara() {
 		return MazeBox.departureChara;
+	}
+
+	@Override
+	public Color getColor() {
+		return Color.RED;
 	}
 
 }
