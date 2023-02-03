@@ -12,12 +12,15 @@ public class WindowPanel extends JPanel {
 	
 	private MazePanel mazePanel;
 	private ToolsPanel toolsPanel;
+	@SuppressWarnings("unused")
+	private ConsolePanel consolePanel;
 
 	public WindowPanel(MazeWindow window) {
 		setLayout(new BorderLayout());
 		
 		add(mazePanel = new MazePanel(window), BorderLayout.CENTER);
 		add(toolsPanel = new ToolsPanel(window), BorderLayout.EAST);
+		add(consolePanel = new ConsolePanel(window), BorderLayout.SOUTH);
 	}
 	
 	public void tick() {

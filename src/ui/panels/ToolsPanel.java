@@ -52,6 +52,9 @@ public class ToolsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				window.getLaby().solve();
+				if(window.getLaby().path == null) {
+					ConsolePanel.instance.WriteMessage("No path found !", ConsolePanel.ERROR);
+				}
 				window.repaint();
 			}
 		});

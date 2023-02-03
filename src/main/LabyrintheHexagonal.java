@@ -8,6 +8,7 @@ import graph.ShortestPaths;
 import graph.Vertex;
 import maze.Maze;
 import ui.MazeWindow;
+import ui.panels.ConsolePanel;
 
 public class LabyrintheHexagonal {
 	
@@ -36,12 +37,15 @@ public class LabyrintheHexagonal {
 		try {
 			maze.initFromTextFile(filename);
 			path = null;
+			ConsolePanel.instance.WriteMessage("Successfully loaded " + filename + ".", ConsolePanel.INFO);
 		} catch (MazeReadingException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			ConsolePanel.instance.WriteMessage("Error while loading" + filename + " : " + e.getMessage(), ConsolePanel.ERROR);
 		}
 	}
 	public void save(String filename) {
 		maze.saveToTextFile(filename);
+		ConsolePanel.instance.WriteMessage("Successfully saved in " + filename + ".", ConsolePanel.INFO);
 	}
 	
 	public void solve() {

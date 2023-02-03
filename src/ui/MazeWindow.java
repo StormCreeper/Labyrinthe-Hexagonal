@@ -21,8 +21,9 @@ import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 import main.LabyrintheHexagonal;
+import ui.panels.ConsolePanel;
 import ui.panels.WindowPanel;
-
+ 
 public class MazeWindow extends JFrame {
 
 	/**
@@ -32,7 +33,7 @@ public class MazeWindow extends JFrame {
 	
 	private LabyrintheHexagonal laby;
 	
-	WindowPanel wp;
+	private WindowPanel wp;
 
 	public MazeWindow(LabyrintheHexagonal laby) throws HeadlessException {
 		super("Labyrinthe Hexagonal");
@@ -45,26 +46,39 @@ public class MazeWindow extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 		    public void windowClosing(WindowEvent event) {
-				if(showQuitDialog())
+				if(showQuitDialog()) {
 					dispose();
+					System.exit(0);
+				}
 		    }
 		});
 		
-		JMenuItem item = new JMenuItem("Quit");
-		JMenu menu = new JMenu("File");
 		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		JMenuItem quitItem = new JMenuItem("Quit");
+		JMenu displayMenu = new JMenu("Display");
+		JMenuItem consoleItem = new JMenuItem("Toggle console");
 		
-		item.addActionListener(new ActionListener() {
-			
+		
+		quitItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(showQuitDialog()) 
 					dispose();
 			}
 		});
+		consoleItem.addActionListener(new ActionListener() { 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ConsolePanel.instance.setVisible(!ConsolePanel.instance.isVisible());
+			}
+		});
 		
-		menu.add(item);
-		menuBar.add(menu);
+		fileMenu.add(quitItem);
+		menuBar.add(fileMenu);
+		
+		displayMenu.add(consoleItem);
+		menuBar.add(displayMenu);
 		
 		setJMenuBar(menuBar);
 		

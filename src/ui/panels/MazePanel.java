@@ -147,6 +147,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	
 	@Override
 	public final void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		g.clearRect(0, 0, getWidth(), getHeight());
 		
 		Maze maze = window.getLaby().getMaze();
@@ -167,7 +168,6 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		List<Vertex> path = window.getLaby().path;
 		if(path != null) {
 			for(int i = 0; i<path.size() && i < cellIndex; i++) {
-				//for(Vertex v : window.getLaby().path) {
 				MazeBox m = (MazeBox)path.get(i);
 				
 				if(m.getChara() != MazeBox.emptyChara) continue;
@@ -179,13 +179,6 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		
 		highlight(selected, Color.white, g);
 		highlight(lastSelected, Color.red, g);
-		/*
-		g.setColor(Color.black);
-		g.drawRect((int)Math.round(resultX), (int)Math.round(resultY), (int)Math.round(resultW), (int)Math.round(resultH));
-
-		g.setColor(Color.red);
-		g.drawRect(padding, padding, getWidth() - padding * 2, getHeight() - padding * 2);
-		*/
 	}
 
 	private boolean changeCell() {
