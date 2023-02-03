@@ -46,7 +46,6 @@ public abstract class MazeBox implements Vertex {
 				public char getChara() { return invalidChara; }
 			};
 		}
-		
 	}
 	
 	public MazeBox(int i, int j, Maze maze) {

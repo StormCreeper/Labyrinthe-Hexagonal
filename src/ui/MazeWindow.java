@@ -24,25 +24,33 @@ import main.LabyrintheHexagonal;
 import ui.panels.ConsolePanel;
 import ui.panels.WindowPanel;
  
-public class MazeWindow extends JFrame {
 
-	/**
-	 * 
-	 */
+/**
+ * Cette classe est la fenêtre principale du jeu. Elle contient un WindowPanel qui prend tout l'écran, et le menu.
+ * Elle transmet aussi une référence sur elle-même à tous ses enfants, ce qui leur donne accès au LabyrintheHexagonal.
+ * 
+ * @author telop
+ */
+public class MazeWindow extends JFrame {
+	
+	// pour supprimer des warnings
 	private static final long serialVersionUID = -1157307886576199547L;
 	
 	private LabyrintheHexagonal laby;
 	
-	private WindowPanel wp;
+	private WindowPanel windowPanel;
 
 	public MazeWindow(LabyrintheHexagonal laby) throws HeadlessException {
 		super("Labyrinthe Hexagonal");
 		
 		this.laby = laby;
 		
-		setContentPane(wp = new WindowPanel(this));
+		setContentPane(windowPanel = new WindowPanel(this));
 		
+		// Désactive la fermeture automatique de la fenêtre
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		
+		// Pour pouvoir afficher un dialogue à la place.
 		addWindowListener(new WindowAdapter() {
 			@Override
 		    public void windowClosing(WindowEvent event) {
@@ -53,12 +61,42 @@ public class MazeWindow extends JFrame {
 		    }
 		});
 		
+		createMenus();
+		
+		pack();
+		setVisible(true);
+		
+		// Système d'animation par des ticks tous les 25ms.
+		
+		Timer timer = new Timer(25, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				windowPanel.tick();
+			}
+		});
+		timer.setRepeats(true);
+		timer.start();
+	}
+	
+	/**
+	 * Initialise tous les menus de la fenêtre.
+	 * File
+	 * 	-> Quit
+	 * Display
+	 * 	-> Toggle console
+	 * 	-> Toggle debug
+	 */
+	public void createMenus() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu fileMenu = new JMenu("File");
 		JMenuItem quitItem = new JMenuItem("Quit");
+		
 		JMenu displayMenu = new JMenu("Display");
 		JMenuItem consoleItem = new JMenuItem("Toggle console");
+		JMenuItem debugItem = new JMenuItem("Toggle debug");
 		
+		// Programmation des actions
 		
 		quitItem.addActionListener(new ActionListener() {
 			@Override
@@ -67,10 +105,17 @@ public class MazeWindow extends JFrame {
 					dispose();
 			}
 		});
-		consoleItem.addActionListener(new ActionListener() { 
+		consoleItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ConsolePanel.instance.setVisible(!ConsolePanel.instance.isVisible());
+				ConsolePanel.ToggleConsole();
+			}
+		});
+		debugItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LabyrintheHexagonal.Debug = !LabyrintheHexagonal.Debug;
+				repaint();
 			}
 		});
 		
@@ -78,24 +123,17 @@ public class MazeWindow extends JFrame {
 		menuBar.add(fileMenu);
 		
 		displayMenu.add(consoleItem);
+		displayMenu.add(debugItem);
 		menuBar.add(displayMenu);
 		
 		setJMenuBar(menuBar);
-		
-		pack();
-		setVisible(true);
-		
-		Timer timer = new Timer(25, new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				wp.tick();
-			}
-		});
-		timer.setRepeats(true);
-		timer.start();
 	}
 	
+	/**
+	 * Affiche un dialogue de confirmation avant de quitter l'application.
+	 * 
+	 * @return true si la fenêtre doit se fermer à l'issue de ce dialogue, faux sinon.
+	 */
 	public boolean showQuitDialog() {
 		if(laby.getMaze().isModified()) {
 			int response = JOptionPane.showInternalOptionDialog(null, "Maze not saved. Save it ?", "Quit app", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
@@ -113,6 +151,11 @@ public class MazeWindow extends JFrame {
 		return true;
 	}
 	
+	/**
+	 * Affiche un dialogue de séléction de la taille
+	 * 
+	 * @return si l'utilisateur a choisi une taille ou non
+	 */
 	public boolean showChooseSizeDialog() {
 		SpinnerNumberModel widthModel = new  SpinnerNumberModel(getLaby().getMaze().getWidth(), 2, 50, 1);
 		JSpinner widthSpinner = new JSpinner(widthModel);
@@ -142,6 +185,11 @@ public class MazeWindow extends JFrame {
 		return false;
 	}
 	
+	/**
+	 * Affiche un dialogue de sélection de fichier pour l'enregistrement et met à jour le labyrinthe si besoin..
+	 * 
+	 * @return si l'utilisateur a sélectionné un fichier ou non
+	 */
 	public boolean showLoadDialog() {
 		JFileChooser fc = new JFileChooser(new File("data"));
 		int returnVal = fc.showOpenDialog(this);
@@ -156,6 +204,11 @@ public class MazeWindow extends JFrame {
 		return false;
 	}
 	
+	/**
+	 * Affiche un dialogue de sélection de fichier pour l'enregistrement
+	 * 
+	 * @return si l'utilisateur a sélectionné un fichier ou non
+	 */
 	public boolean showSaveDialog() {
 		JFileChooser fc = new JFileChooser(new File("data"));
 		int returnVal = fc.showSaveDialog(this);
@@ -169,7 +222,10 @@ public class MazeWindow extends JFrame {
 		}
 		return false;
 	}
-	
+	/**
+	 * Getter pour la variable laby.
+	 * @return le labyrinthe principal
+	 */
 	public LabyrintheHexagonal getLaby() {
 		return laby;
 	}

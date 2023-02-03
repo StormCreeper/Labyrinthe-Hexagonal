@@ -16,6 +16,33 @@ import ui.MazeWindow;
 
 public class ConsolePanel extends JPanel {
 	private static final long serialVersionUID = -8890252228755132252L;
+
+	public static final String DEFAULT = "default";
+	public static final String ERROR = "error";
+	public static final String INFO = "info";
+	
+	private static ConsolePanel instance;
+	
+	public static void Write(String line, String style) {
+		if(instance == null) {
+			System.out.println(line);
+		} else {
+			showBriefly();
+			instance.writeMessage(line, style);
+		}
+	}
+	public static void Tick() {
+		if(instance != null)
+			instance.tick();
+	}
+	
+	public static void ToggleConsole() {
+		if(instance != null) {
+			instance.visible = !instance.visible;
+			instance.setVisible(instance.visible);
+			instance.decompte = 0;
+		}
+	}
 	
 	JTextPane txtPane;
 	JScrollPane scrollPane;
@@ -25,11 +52,8 @@ public class ConsolePanel extends JPanel {
 	private Style error;
 	private Style info;
 	
-	public static final String DEFAULT = "default";
-	public static final String ERROR = "error";
-	public static final String INFO = "info";
-	
-	public static ConsolePanel instance;
+	private boolean visible;
+	private int decompte = 0;
 	
 	int cursor = 0;
 
@@ -44,6 +68,7 @@ public class ConsolePanel extends JPanel {
 		
 		txtPane = new JTextPane();
 		scrollPane = new JScrollPane(txtPane);
+		txtPane.setEditable(false);
 		
 		txtPane.setBackground(new Color(.9f, .9f, .9f));
 		
@@ -61,12 +86,26 @@ public class ConsolePanel extends JPanel {
 		StyleConstants.setForeground(info, new Color(.0f, .8f, .0f));
 	}
 	
-	public void WriteMessage(String line, String style) {
+	public void writeMessage(String line, String style) {
 		try {
 			sdoc.insertString(cursor, line + "\n", txtPane.getStyle(style));
 			cursor += line.length() + 1;
 		} catch (BadLocationException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void showBriefly() {
+		if(instance != null)
+			instance.decompte = 41;
+	}
+	
+	public void tick() {
+		if(!visible) {
+			if(decompte > 0) decompte--;
+			setVisible(decompte > 0);
+		} else {
+			setVisible(true);
 		}
 	}
 

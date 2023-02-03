@@ -12,6 +12,8 @@ import ui.panels.ConsolePanel;
 
 public class LabyrintheHexagonal {
 	
+	public static boolean Debug = false;
+	
 	private Maze maze;
 	public List<Vertex> path;
 
@@ -37,15 +39,15 @@ public class LabyrintheHexagonal {
 		try {
 			maze.initFromTextFile(filename);
 			path = null;
-			ConsolePanel.instance.WriteMessage("Successfully loaded " + filename + ".", ConsolePanel.INFO);
+			ConsolePanel.Write("Successfully loaded " + filename + ".", ConsolePanel.INFO);
 		} catch (MazeReadingException e) {
 			//e.printStackTrace();
-			ConsolePanel.instance.WriteMessage("Error while loading" + filename + " : " + e.getMessage(), ConsolePanel.ERROR);
+			ConsolePanel.Write("Error while loading" + filename + " : " + e.getMessage(), ConsolePanel.ERROR);
 		}
 	}
 	public void save(String filename) {
 		maze.saveToTextFile(filename);
-		ConsolePanel.instance.WriteMessage("Successfully saved in " + filename + ".", ConsolePanel.INFO);
+		ConsolePanel.Write("Successfully saved in " + filename + ".", ConsolePanel.INFO);
 	}
 	
 	public void solve() {

@@ -12,25 +12,32 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import graph.Vertex;
+import main.LabyrintheHexagonal;
 import maze.Maze;
 import maze.MazeBox;
 import ui.MazeWindow;
 
+
+/**
+ * Panel qui contient le dessin du labyrinthe, et qui gère les évènements d'entrée utilisateur : sélection, modification des cellules etc.
+ * 
+ * @author telop
+ */
 public class MazePanel extends JPanel implements MouseMotionListener, MouseListener {
 
-	/**
-	 * 
-	 */
+	// Pour enlever des warnings
 	private static final long serialVersionUID = 3038870474473344877L;
 
 	private MazeWindow window;
 	
+	//Variables d'états pour la sélection et modification
 	private MazeBox selected = null;
 	private MazeBox lastSelected = null;
 	private char tool = MazeBox.wallChara;
 	
-	private double hexagonRatio = (float) Math.cos(Math.PI *(1/3.-1/2.));
-	private int padding = 10;
+	// Constantes pour le dessin
+	private final double hexagonRatio = (float) Math.cos(Math.PI *(1/3.-1/2.));
+	private final int padding = 10;
 	
 	public MazePanel(MazeWindow window) {
 		setPreferredSize(new Dimension(600, 600));
@@ -49,10 +56,11 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	private double resultW = 0;
 	private double resultH = 0;
 	
+	// Rayon d'un hexagone
 	private double radius = 0;
 	
 	/**
-	 * Calcule le rayon maximal de chaque hexagone tel que le labyrinthe total ne dépasse pas de la zone de dessin, en prenant en compte le padding.
+	 * Calcule le rayon maximal des hexagones tel que le dessin du labyrinthe ne dépasse pas de la zone de dessin, en prenant en compte le padding.
 	 * Cette fonction calcule aussi la largeur, hauteur, ainsi que les coordonnées du coin haut-gauche du labyrinthe quand il est affiché avec ce rayon.
 	 */
 	private void recalculateMazeBounds() {
@@ -87,8 +95,8 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	/**
 	 * Crée un hexagone de type java.awt.Polygon, de rayon radius, associé aux coordonnéees i et j.
 	 * 
-	 * @param i abcisse de l'hexagone.
-	 * @param j ordonnée de l'hexagone.
+	 * @param i abcisse de l'hexagone dans le tableau.
+	 * @param j ordonnée de l'hexagone dans le tableau.
 	 * @return un Polygon représentant l'hexagone.
 	 */
 	private Polygon getHexa(int i, int j) {
@@ -107,7 +115,9 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	}
 	
 	private Color getCellColor(int i, int j) {
-		Color color = window.getLaby().getMaze().getBox(i, j).getColor();
+		MazeBox box = window.getLaby().getMaze().getBox(i, j);
+		if(box == null) return Color.PINK; // Du rose correspond à une erreur.
+		Color color = box.getColor();
 		if(color == null) return Color.PINK;
 		
 		return color;
@@ -128,6 +138,12 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		);
 	}
 	
+	/**
+	 * Dessine une case surlignée, en mélangeant sa couleur avec une couleur de référence.
+	 * @param box La case à dessiner.
+	 * @param color La couleur de surlignage.
+	 * @param g L'object Graphics sur lequel dessiner.
+	 */
 	private void highlight(MazeBox box, Color color, Graphics g) {
 		if(box != null) {
 			int i = box.getI();
@@ -148,6 +164,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	@Override
 	public final void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
 		g.clearRect(0, 0, getWidth(), getHeight());
 		
 		Maze maze = window.getLaby().getMaze();
@@ -155,6 +172,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		int w = maze.getWidth();
 		int h = maze.getHeight();
 		
+		// On recalcule à chaque fois pour prendre en compte un éventuel redimensionnement de la fenêtre de dessin
 		recalculateMazeBounds();
 
 		for(int i=0; i<w; i++) {
@@ -165,6 +183,8 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 				g.drawPolygon(getHexa(i, j));
 			}
 		}
+		
+		// Affichage du chemin trouvé par l'algorithme s'il existe
 		List<Vertex> path = window.getLaby().path;
 		if(path != null) {
 			for(int i = 0; i<path.size() && i < cellIndex; i++) {
@@ -177,8 +197,20 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 			}
 		}
 		
+		// Affichage du curseur
 		highlight(selected, Color.white, g);
 		highlight(lastSelected, Color.red, g);
+		
+		// Affichage des éléments de débug
+		
+		if(LabyrintheHexagonal.Debug) {
+			
+			g.setColor(Color.black);
+			g.drawRect((int)Math.round(resultX), (int)Math.round(resultY), (int)Math.round(resultW), (int)Math.round(resultH));
+	
+			g.setColor(Color.red);
+			g.drawRect(padding, padding, getWidth() - padding * 2, getHeight() - padding * 2);
+		}
 	}
 
 	private boolean changeCell() {
@@ -212,11 +244,16 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	
 	private int cellIndex = 0;
 	
+	/**
+	 * Fonction qui est appelée toutes les 25 millisecondes, permettant d'animer l'affichage du chemin
+	 */
 	public void tick() {
 		cellIndex++;
 		if(window.getLaby().path == null) cellIndex = 0;
 		repaint();
 	}
+	
+// ------------------- Implémentation des méthodes d'interfaces -----------------------
 	
 	@Override
 	public void mouseDragged(MouseEvent e) {

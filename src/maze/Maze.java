@@ -132,6 +132,7 @@ public class Maze implements Graph, Distance{
 			
 			for(int j=0; j<height; j++) {
 				if(lines.get(j+1).length() != width) {
+					reset();
 					throw new MazeReadingException(filename, j, "Wrong number of column at line " + j + ", expected " + width + ", got " + lines.get(j).length() + ".");
 				}
 				for(int i = 0; i<width; i++) {
