@@ -19,10 +19,11 @@ Vous pouvez juste télécharger le dossier du projet en .zip avec gitlab.
 ## Utilisation
 Il suffit d'exécuter le fichier builds/build.jar. En ligne de commande, vous pouvez spécifier en argument le chemin d'accès à un fichier de labyrinthe, qui sera chargé au démarrage.
 
-Une fois le logiciel lancé, vous pouvez intéragir avec les boutons, ou avec les cases du labyrinthe avec la souris. Si vous cliquez sur une case :
+Une fois le logiciel lancé, vous pouvez interagir avec les boutons, ou avec les cases du labyrinthe avec la souris. Si vous cliquez sur une case :
 	- Si c'est un mur, la case devient vide, si elle est vide, elle devient un mur. Si vous faites glisser la souris, le contenu des cases survolées est selon la première case sélectionnée.
 	- Si c'est la case départ ou arrivée, cliquez sur une autre case pour définir le nouvel emplacement du départ ou de l'arrivée.
-C'est à peu près tout pour le moment.
+Vous pouvez activer la console (qui ne s'affiche qu'un instant par défaut) et le mode debug dans le menu d'affichage.
+Il y a quelques labyrinthes d'exemple : un petit, un moyen et un grand, ainsi qu'un labyrinthe qui provoque une erreur.
 
 ## Support
 Vous pouvez m'envoyer un mail à telo.philippe@telecom-paris.fr en cas de problème ou pour signaler un bug.
