@@ -14,10 +14,10 @@ import ui.MazeWindow;
  */
 public class WindowPanel extends JPanel {
 
+	// Pour enlever le warning d'Eclipse
 	private static final long serialVersionUID = -4761522094862460317L;
 	
 	private MazePanel mazePanel;
-	
 
 	public WindowPanel(MazeWindow window) {
 		setLayout(new BorderLayout());
@@ -27,9 +27,11 @@ public class WindowPanel extends JPanel {
 		add(new ConsolePanel(window), BorderLayout.SOUTH);
 	}
 	
+	/*
+	 * Progage le signal de tick
+	 */
 	public void tick() {
 		mazePanel.tick();
 		ConsolePanel.Tick();
 	}
-
 }

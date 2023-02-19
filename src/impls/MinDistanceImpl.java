@@ -5,6 +5,11 @@ import java.util.HashMap;
 import graph.MinDistance;
 import graph.Vertex;
 
+/**
+ * Implémentation de MinDistance pour le labyrinthe
+ * @author telop
+ *
+ */
 public class MinDistanceImpl implements MinDistance {
 	
 	private HashMap<Vertex, Integer> map;

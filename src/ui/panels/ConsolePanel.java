@@ -14,6 +14,8 @@ import javax.swing.text.StyledDocument;
 
 import ui.MazeWindow;
 
+
+// Classe singleton permettant d'avoir une console dqns l'interface du labyrithe.
 public class ConsolePanel extends JPanel {
 	private static final long serialVersionUID = -8890252228755132252L;
 
@@ -21,9 +23,12 @@ public class ConsolePanel extends JPanel {
 	public static final String ERROR = "error";
 	public static final String INFO = "info";
 	
+	// On ne veut qu'une seule instance de la console, accessible depuis partout, pour pouvoir écrire depuis n'importe où dans les programme:
+	// ConsolePanel.Write(message, style);
 	private static ConsolePanel instance;
 	
 	public static void Write(String line, String style) {
+		// On gère aussi le cas où l'on a pas créé de console (Labyrinthe en ligne de commande), dans ce ca, on écrit dans la console java.
 		if(instance == null) {
 			System.out.println(line);
 		} else {
@@ -86,7 +91,7 @@ public class ConsolePanel extends JPanel {
 		StyleConstants.setForeground(info, new Color(.0f, .8f, .0f));
 	}
 	
-	public void writeMessage(String line, String style) {
+	private void writeMessage(String line, String style) {
 		try {
 			sdoc.insertString(cursor, line + "\n", txtPane.getStyle(style));
 			cursor += line.length() + 1;

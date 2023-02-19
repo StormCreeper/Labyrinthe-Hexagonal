@@ -165,7 +165,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	public final void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		g.clearRect(0, 0, getWidth(), getHeight());
+		//g.clearRect(0, 0, getWidth(), getHeight());
 		
 		Maze maze = window.getLaby().getMaze();
 		

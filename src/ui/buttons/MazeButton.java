@@ -6,6 +6,12 @@ import javax.swing.JButton;
 
 import ui.MazeWindow;
 
+/**
+ * Tous les boutons du labyrinthe sont les mêmes, seule la fonction qu'ils appellent changent.
+ * 
+ * @author telop
+ *
+ */
 public class MazeButton extends JButton {
 	private static final long serialVersionUID = -8397203269460765L;
 	

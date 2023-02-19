@@ -9,6 +9,13 @@ import javax.swing.JPanel;
 import ui.MazeWindow;
 import ui.buttons.MazeButton;
 
+
+/**
+ * Panel qui contient les boutons d'édition. Il utilise un gridlayout, et fait le lien entre les boutons et les fonctions du labyrinthe.
+ * 
+ * @author telop
+ *
+ */
 public class ToolsPanel extends JPanel {
 	private static final long serialVersionUID = 4432571170375056548L;
 
@@ -28,6 +35,8 @@ public class ToolsPanel extends JPanel {
 		add(loadButton = new MazeButton(window, "Load Maze"));
 		add(saveButton = new MazeButton(window, "Save Maze"));
 		add(solveButton = new MazeButton(window, "Solve Maze"));
+		
+		// Ajout des actions des boutons.
 		
 		emptyButton.addActionListener(new ActionListener() {
 			@Override

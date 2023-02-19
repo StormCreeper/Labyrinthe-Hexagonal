@@ -26,7 +26,6 @@ public abstract class MazeBox implements Vertex {
 	protected int i;
 	protected int j;
 
-	
 	public abstract char getChara();
 	public abstract Color getColor();
 	
@@ -63,7 +62,6 @@ public abstract class MazeBox implements Vertex {
 	
 	@Override
 	public String getLabel() {
-
 		return "(" + i + ", " + j + ")";
 	}
 

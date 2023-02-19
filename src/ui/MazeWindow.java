@@ -33,7 +33,7 @@ import ui.panels.WindowPanel;
  */
 public class MazeWindow extends JFrame {
 	
-	// pour supprimer des warnings
+	// Pour enlever le warning d'Eclipse
 	private static final long serialVersionUID = -1157307886576199547L;
 	
 	private LabyrintheHexagonal laby;
@@ -135,7 +135,7 @@ public class MazeWindow extends JFrame {
 	 * @return true si la fenêtre doit se fermer à l'issue de ce dialogue, faux sinon.
 	 */
 	public boolean showQuitDialog() {
-		if(laby.getMaze().isModified()) {
+		if(laby.getMaze().hasChanged()) {
 			int response = JOptionPane.showInternalOptionDialog(null, "Maze not saved. Save it ?", "Quit app", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
 			switch(response) {
 			case JOptionPane.CANCEL_OPTION:

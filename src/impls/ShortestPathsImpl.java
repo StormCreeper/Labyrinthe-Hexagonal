@@ -8,6 +8,11 @@ import java.util.List;
 import graph.ShortestPaths;
 import graph.Vertex;
 
+/**
+ * Implémentation de ShortestPaths pour le labyrinthe
+ * @author telop
+ *
+ */
 public class ShortestPathsImpl implements ShortestPaths {
 
 	private HashMap<Vertex, Vertex> map;

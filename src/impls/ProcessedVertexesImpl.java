@@ -5,6 +5,11 @@ import java.util.HashSet;
 import graph.ProcessedVertexes;
 import graph.Vertex;
 
+/**
+ * Implémentation de MinProcessedVertices pour le labyrinthe
+ * @author telop
+ *
+ */
 public class ProcessedVertexesImpl implements ProcessedVertexes {
 	
 	private HashSet<Vertex> set;

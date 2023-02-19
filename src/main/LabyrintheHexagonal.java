@@ -10,11 +10,22 @@ import maze.Maze;
 import ui.MazeWindow;
 import ui.panels.ConsolePanel;
 
+/**
+ * Classe qui contient le modèle du labyrinthe (classe Maze) et sa vue (classe MazeWindow).
+ * C'est lui qui gère l'interface entre les boutons et le modèle du labyrinthe, et qui donne la référence au modèle à tous les éléments graphiques.
+ * 
+ * @author telop
+ *
+ */
 public class LabyrintheHexagonal {
 	
+	// Mode débogage activé ou non : montre les bordure du labyrinthe, utilisées pour faire en sorte que le labyrinthe s'adapte à la taille de la fenêtre.
 	public static boolean Debug = false;
 	
+	// Modèle du labyrinthe 
 	private Maze maze;
+	
+	// Chemin résolu par Dijkstra
 	public List<Vertex> path;
 
 	public LabyrintheHexagonal(String[] args) {
@@ -31,10 +42,12 @@ public class LabyrintheHexagonal {
 		
 		new MazeWindow(this);
 	}
+	
 	public void reset() {
 		maze.reset();
 		path = null;
 	}
+	
 	public void load(String filename) {
 		try {
 			maze.initFromTextFile(filename);
