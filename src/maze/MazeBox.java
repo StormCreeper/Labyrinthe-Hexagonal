@@ -3,6 +3,10 @@ package maze;
 import java.awt.Color;
 
 import graph.Vertex;
+import maze.boxes.ArrivalBox;
+import maze.boxes.DepartureBox;
+import maze.boxes.EmptyBox;
+import maze.boxes.WallBox;
 
 
 /**

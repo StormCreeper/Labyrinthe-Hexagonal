@@ -10,7 +10,7 @@ import graph.Vertex;
  * @author telop
  *
  */
-public class MinDistanceImpl implements MinDistance {
+public final class MinDistanceImpl implements MinDistance {
 	
 	private HashMap<Vertex, Integer> map;
 

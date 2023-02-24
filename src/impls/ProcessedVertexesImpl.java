@@ -10,7 +10,7 @@ import graph.Vertex;
  * @author telop
  *
  */
-public class ProcessedVertexesImpl implements ProcessedVertexes {
+public final class ProcessedVertexesImpl implements ProcessedVertexes {
 	
 	private HashSet<Vertex> set;
 

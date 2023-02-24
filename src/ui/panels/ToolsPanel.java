@@ -16,7 +16,7 @@ import ui.buttons.MazeButton;
  * @author telop
  *
  */
-public class ToolsPanel extends JPanel {
+public final class ToolsPanel extends JPanel {
 	private static final long serialVersionUID = 4432571170375056548L;
 
 	private MazeButton emptyButton;

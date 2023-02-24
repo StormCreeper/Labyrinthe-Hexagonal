@@ -1,6 +1,6 @@
 package exceptions;
 
-public class MazeReadingException extends Exception {
+public final class MazeReadingException extends Exception {
 	
 	private static final long serialVersionUID = 2402331259296389686L;
 

@@ -1,6 +1,9 @@
-package maze;
+package maze.boxes;
 
 import java.awt.Color;
+
+import maze.Maze;
+import maze.MazeBox;
 
 /**
  * Classe représentant une case vide du labyrinthe
@@ -8,7 +11,7 @@ import java.awt.Color;
  * @author Telo PHILIPPE
  *
  */
-public class EmptyBox extends MazeBox {
+public final class EmptyBox extends MazeBox {
 
 	public EmptyBox(int i, int j, Maze maze) {
 		super(i, j, maze);

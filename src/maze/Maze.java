@@ -10,6 +10,9 @@ import exceptions.MazeReadingException;
 import graph.Distance;
 import graph.Graph;
 import graph.Vertex;
+import maze.boxes.ArrivalBox;
+import maze.boxes.DepartureBox;
+import maze.boxes.EmptyBox;
 
 
 /**
@@ -19,7 +22,7 @@ import graph.Vertex;
  * @author Telo PHILIPPE
  *
  */
-public class Maze implements Graph, Distance{
+public final class Maze implements Graph, Distance{
 	
 	public MazeBox[][] boxes;
 	private int width, height;

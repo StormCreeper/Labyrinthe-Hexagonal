@@ -23,7 +23,7 @@ import ui.MazeWindow;
  * 
  * @author telop
  */
-public class MazePanel extends JPanel implements MouseMotionListener, MouseListener {
+public final class MazePanel extends JPanel implements MouseMotionListener, MouseListener {
 
 	// Pour enlever des warnings
 	private static final long serialVersionUID = 3038870474473344877L;
@@ -47,7 +47,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	// La taille du labyrinthe calculée pour l'affichage
 	private double boundsW = 0;
 	private double boundsH = 0;
-	
+
 	private int selX = 0;
 	private int selY = 0;
 
@@ -185,7 +185,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	 * 
 	 * @param g
 	 */
-	private final void drawMaze(Graphics g) {
+	private void drawMaze(Graphics g) {
 		// On recalcule à chaque fois pour prendre en compte un éventuel
 		// redimensionnement de la fenêtre de dessin
 		recalculateMazeBounds();
@@ -207,7 +207,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	 * 
 	 * @param g
 	 */
-	private final void drawPath(Graphics g) {
+	private void drawPath(Graphics g) {
 		// Affichage du chemin trouvé par l'algorithme s'il existe
 		List<Vertex> path = window.getLaby().path;
 		if (path != null) {
@@ -228,39 +228,38 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	 * 
 	 * @param g
 	 */
-	private final void drawCursor(Graphics g) {
+	private void drawCursor(Graphics g) {
 		// Affichage du curseur
 		highlight(selected, Color.white, g);
 		highlight(lastSelected, Color.red, g);
-		
 	}
 
 	/**
-	 * Dessin des éléments de debug (boite englobante du labyrinthe) et curseur de sélection.
+	 * Dessin des éléments de debug (boite englobante du labyrinthe) et curseur de
+	 * sélection.
 	 * 
 	 * @param g
 	 */
-	private final void drawDebug(Graphics g) {
+	private void drawDebug(Graphics g) {
 		g.setColor(Color.black);
 		g.drawRect((int) Math.round(boundsX), (int) Math.round(boundsY), (int) Math.round(boundsW),
 				(int) Math.round(boundsH));
 
 		g.setColor(Color.red);
 		g.drawRect(padding, padding, getWidth() - padding * 2, getHeight() - padding * 2);
-		
-		
+
 		// Highlight des cases utilisées pour le test de sélection.
 		Maze maze = window.getLaby().getMaze();
-		
-		for (int i = Math.max(selX-1, 0); i <= Math.min(selX+1, maze.getWidth()-1); i++) {
-			for (int j = Math.max(selY-1, 0); j <= Math.min(selY+1, maze.getHeight()-1); j++) {
+
+		for (int i = Math.max(selX - 1, 0); i <= Math.min(selX + 1, maze.getWidth() - 1); i++) {
+			for (int j = Math.max(selY - 1, 0); j <= Math.min(selY + 1, maze.getHeight() - 1); j++) {
 				highlight(maze.getBox(i, j), Color.GREEN, g);
 			}
 		}
 	}
 
 	@Override
-	public final void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		drawMaze(g);
@@ -272,12 +271,13 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 		if (LabyrintheHexagonal.Debug)
 			drawDebug(g);
 	}
-	
+
 	/**
 	 * Modifie la case sous le curseur avec l'outil actuellement utilisé.
+	 * 
 	 * @return si la modification a bien eu lieu
 	 */
-	private final boolean changeCell() {
+	private boolean changeCell() {
 		if (selected == null)
 			return false;
 
@@ -286,15 +286,16 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 
 		return changeCell(i, j, tool);
 	}
-	
+
 	/**
 	 * Modifie la case (i, j) avec l'outil tool.
+	 * 
 	 * @param i
 	 * @param j
 	 * @param tool
 	 * @return si la modification a bien eu lieu
 	 */
-	private final boolean changeCell(int i, int j, char tool) {
+	private boolean changeCell(int i, int j, char tool) {
 		if (tool == MazeBox.invalidChara)
 			return false;
 
@@ -303,40 +304,43 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 
 		return true;
 	}
-	
+
 	/**
-	 * Cherche parmi toutes les cases une intersection avec la souris, pour déterminer la case sélectionnée
+	 * Cherche parmi toutes les cases une intersection avec la souris, pour
+	 * déterminer la case sélectionnée
 	 * 
 	 * @param mouseX
 	 * @param mouseY
 	 */
-	private final void selectCell(int mouseX, int mouseY) {
+	private void selectCell(int mouseX, int mouseY) {
 		Maze maze = window.getLaby().getMaze();
 		selected = null;
-		
-		// Déterminer la case approximative correspondant à la souris
-		selX = (int)((mouseX - boundsX) / boundsW * maze.getWidth());
-		selY = (int)((mouseY - boundsY) / boundsH * maze.getHeight());
-		
-		// On fait ensuite un test de collision précis autour de cette position approximative
 
-		for (int i = Math.max(selX-1, 0); i <= Math.min(selX+1, maze.getWidth()-1); i++) {
-			for (int j = Math.max(selY-1, 0); j <= Math.min(selY+1, maze.getHeight()-1); j++) {
+		// Déterminer la case approximative correspondant à la souris
+		selX = (int) ((mouseX - boundsX) / boundsW * maze.getWidth());
+		selY = (int) ((mouseY - boundsY) / boundsH * maze.getHeight());
+
+		// On fait ensuite un test de collision précis autour de cette position
+		// approximative
+
+		for (int i = Math.max(selX - 1, 0); i <= Math.min(selX + 1, maze.getWidth() - 1); i++) {
+			for (int j = Math.max(selY - 1, 0); j <= Math.min(selY + 1, maze.getHeight() - 1); j++) {
 				if (getHexa(i, j).contains(new Point(mouseX, mouseY)))
 					selected = maze.boxes[i][j];
 			}
 		}
-		
-		// On limite ainsi le nombre de tests de collision entre le pointeur et les hexagones
-		// (Ceci a permi de supprimer un ralentissement observé lorsque le curseur bougeait sur une grille très grande)
-		
+
+		// On limite ainsi le nombre de tests de collision entre le pointeur et les
+		// hexagones
+		// (Ceci a permi de supprimer un ralentissement observé lorsque le curseur
+		// bougeait sur une grille très grande)
+
 		// Ancienne méthode :
-		/*for (int i = 0; i < maze.getWidth(); i++) {
-			for (int j = 0; j < maze.getHeight(); j++) {
-				if (getHexa(i, j).contains(new Point(mouseX, mouseY)))
-					selected = maze.boxes[i][j];
-			}
-		}*/
+		/*
+		 * for (int i = 0; i < maze.getWidth(); i++) { for (int j = 0; j <
+		 * maze.getHeight(); j++) { if (getHexa(i, j).contains(new Point(mouseX,
+		 * mouseY))) selected = maze.boxes[i][j]; } }
+		 */
 	}
 
 	private int cellIndex = 0;
@@ -345,7 +349,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	 * Fonction qui est appelée toutes les 25 millisecondes, permettant d'animer
 	 * l'affichage du chemin
 	 */
-	public final void tick() {
+	public void tick() {
 		cellIndex++;
 		if (window.getLaby().path == null)
 			cellIndex = 0;
@@ -355,7 +359,7 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 // ------------------- Implémentation des méthodes d'interfaces -----------------------
 
 	@Override
-	public final void mouseDragged(MouseEvent e) {
+	public void mouseDragged(MouseEvent e) {
 		selectCell(e.getX(), e.getY());
 		if (tool != MazeBox.arrivalChara && tool != MazeBox.departureChara && selected != null
 				&& selected.getChara() != MazeBox.arrivalChara && selected.getChara() != MazeBox.departureChara)
@@ -364,25 +368,24 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	}
 
 	@Override
-	public final void mouseMoved(MouseEvent e) {
+	public void mouseMoved(MouseEvent e) {
 		selectCell(e.getX(), e.getY());
 		repaint();
 	}
 
 	@Override
-	public final void mouseClicked(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) {
 
 	}
 
 	@Override
-	public final void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent e) {
 		selectCell(e.getX(), e.getY());
 		if (selected == null)
 			return;
 
 		if (tool == MazeBox.arrivalChara || tool == MazeBox.departureChara) {
-			if (selected.getChara() != MazeBox.arrivalChara 
-					&& selected.getChara() != MazeBox.departureChara
+			if (selected.getChara() != MazeBox.arrivalChara && selected.getChara() != MazeBox.departureChara
 					&& changeCell()) {
 				changeCell(lastSelected.getI(), lastSelected.getJ(), MazeBox.emptyChara);
 				tool = MazeBox.emptyChara;
@@ -410,15 +413,15 @@ public class MazePanel extends JPanel implements MouseMotionListener, MouseListe
 	}
 
 	@Override
-	public final void mouseReleased(MouseEvent e) {
+	public void mouseReleased(MouseEvent e) {
 	}
 
 	@Override
-	public final void mouseEntered(MouseEvent e) {
+	public void mouseEntered(MouseEvent e) {
 	}
 
 	@Override
-	public final void mouseExited(MouseEvent e) {
+	public void mouseExited(MouseEvent e) {
 	}
 
 }

@@ -17,7 +17,7 @@ import ui.panels.ConsolePanel;
  * @author telop
  *
  */
-public class LabyrintheHexagonal {
+public final class LabyrintheHexagonal {
 	
 	// Mode débogage activé ou non : montre les bordure du labyrinthe, utilisées pour faire en sorte que le labyrinthe s'adapte à la taille de la fenêtre.
 	public static boolean Debug = false;

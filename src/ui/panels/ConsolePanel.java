@@ -16,7 +16,7 @@ import ui.MazeWindow;
 
 
 // Classe singleton permettant d'avoir une console dqns l'interface du labyrithe.
-public class ConsolePanel extends JPanel {
+public final class ConsolePanel extends JPanel {
 	private static final long serialVersionUID = -8890252228755132252L;
 
 	public static final String DEFAULT = "default";

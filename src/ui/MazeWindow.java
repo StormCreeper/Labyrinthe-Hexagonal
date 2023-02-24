@@ -31,7 +31,7 @@ import ui.panels.WindowPanel;
  * 
  * @author telop
  */
-public class MazeWindow extends JFrame {
+public final class MazeWindow extends JFrame {
 	
 	// Pour enlever le warning d'Eclipse
 	private static final long serialVersionUID = -1157307886576199547L;

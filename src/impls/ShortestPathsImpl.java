@@ -13,7 +13,7 @@ import graph.Vertex;
  * @author telop
  *
  */
-public class ShortestPathsImpl implements ShortestPaths {
+public final class ShortestPathsImpl implements ShortestPaths {
 
 	private HashMap<Vertex, Vertex> map;
 	
