@@ -26,5 +26,10 @@ public final class WallBox extends MazeBox {
 	public Color getColor() {
 		return Color.BLACK;
 	}
+	
+	@Override
+	public boolean isWall() {
+		return true;
+	}
 
 }

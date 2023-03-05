@@ -5,13 +5,16 @@ import java.awt.Color;
 import maze.Maze;
 import maze.MazeBox;
 
+/**
+ * Classe utilisée pour l'algorithme de génération. Une GeneratorBox est vouée à être remplacée par une "vrai" case après la génération.
+ * @author telop
+ *
+ */
 public class GeneratorBox extends MazeBox {
 	
 	public int depth = 0;
 	public int tmpDepth = 0;
 	boolean isTemp = false;
-	
-	GeneratorBox parent;
 	
 	public GeneratorBox(int i, int j, Maze maze) {
 		super(i, j, maze);
@@ -34,6 +37,11 @@ public class GeneratorBox extends MazeBox {
 			if(depth == 1) return new Color(50, 50, 50);
 		}
 		return Color.black;
+	}
+	
+	@Override
+	public boolean isWall() {
+		return false;
 	}
 
 }

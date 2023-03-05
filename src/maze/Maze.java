@@ -76,7 +76,7 @@ public class Maze implements Graph, Distance{
 		
 		MazeBox mazeBox = (MazeBox)vertex;
 		
-		if(mazeBox.getChara() == MazeBox.wallChara) return successors;
+		if(mazeBox.isWall()) return successors;
 		
 		int i = mazeBox.getI();
 		int j = mazeBox.getJ();

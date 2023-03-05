@@ -32,6 +32,9 @@ public abstract class MazeBox implements Vertex {
 
 	public abstract char getChara();
 	public abstract Color getColor();
+	public boolean isWall() {
+		return false;
+	}
 	
 	public static MazeBox createMazeBox(int i, int j, char chara, Maze maze) {
 		switch(chara) {
