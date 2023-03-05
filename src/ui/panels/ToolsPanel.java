@@ -23,20 +23,18 @@ public final class ToolsPanel extends JPanel {
 
 	private MazeButton emptyButton;
 	private MazeButton loadButton;
-	private MazeButton generateButton;
 	private MazeButton saveButton;
 	private MazeButton solveButton;
 	
 	public ToolsPanel(MazeWindow window) {
 		
-		setLayout(new GridLayout(5, 1));
+		setLayout(new GridLayout(4, 1));
 		
 		setPreferredSize(new Dimension(200, 600));
 		setBackground(Color.red);
 		
 		add(emptyButton = new MazeButton(window, "Empty"));
 		add(loadButton = new MazeButton(window, "Load"));
-		add(generateButton = new MazeButton(window, "Random Maze"));
 		add(saveButton = new MazeButton(window, "Save"));
 		add(solveButton = new MazeButton(window, "Solve"));
 		
@@ -56,13 +54,6 @@ public final class ToolsPanel extends JPanel {
 			}
 		});
 		
-		generateButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				window.getLaby().setMaze(new Generator(window.getLaby().getMaze()).Generate().convertToMaze());
-			}
-		});
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

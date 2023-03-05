@@ -34,13 +34,13 @@ public class Generator extends Maze {
 	
 	public Generator Generate() {
 		setBox(0, 0, 3);
-		GeneratorBox next = randomFromDepth(1, false);
+		GeneratorBox next = selectFromDepth(1, false);
 		while(next != null) {
 			boolean cont = true;
 			while(cont) {
 				cont = !randomWalk(next.getI(), next.getJ());
 			}
-			next = randomFromDepth(1, false);
+			next = selectFromDepth(1, false);
 		}
 		return this;
 	}
@@ -78,10 +78,9 @@ public class Generator extends Maze {
 	
 	/**
 	 * Met à jour récursivement la profondeur d'une case, qui signifie la distance de cette case à un chemin.
-	 * @param i
-	 * @param j
-	 * @param depth
-	 * @param parent
+	 * @param i de la case
+	 * @param j de la case
+	 * @param depth la profondeur voulue
 	 */
 	private void setBox(int i, int j, int depth) {
 		GeneratorBox box = (GeneratorBox) boxes[i][j];
@@ -97,6 +96,12 @@ public class Generator extends Maze {
 			setBox(succBox.getI(), succBox.getJ(), depth - 1);
 		}
 	}
+	/**
+	 * Met à jour récursivement la profondeur temporaire d'une case, qui signifie la distance de cette case à un chemin.
+	 * @param i de la case
+	 * @param j de la case
+	 * @param depth la profondeur temporaire voulue
+	 */
 	private void setTmpBox(int i, int j, int depth) {
 		GeneratorBox box = (GeneratorBox) boxes[i][j];
 		if(box.tmpDepth >= depth) return;
@@ -113,6 +118,9 @@ public class Generator extends Maze {
 		}
 	}
 	
+	/**
+	 * Copie la profondaire temporaire dans la profondeur actuelle
+	 */
 	private void updateTmp() {
 		for(int i=0; i<width; i++) {
 			for(int j=0; j<height; j++) {
@@ -122,6 +130,10 @@ public class Generator extends Maze {
 			}
 		}
 	}
+	
+	/**
+	 * Copie la profondaire actuelle dans la profondeur temporaire
+	 */
 	private void resetTmp() {
 		for(int i=0; i<width; i++) {
 			for(int j=0; j<height; j++) {
@@ -132,24 +144,27 @@ public class Generator extends Maze {
 		}
 	}
 	
-	private ArrayList<GeneratorBox> getAllFromDepth(int depth, boolean tmp) {
-		ArrayList<GeneratorBox> result = new ArrayList<>();
+	/**
+	 * Renvoie une case qui a la porfondeur voulue, en choisissant la profondeur actuelle ou temporaire.
+	 * @param depth la profondeur voulue.
+	 * @param tmp si on doit considérer la profondeur temporaire ou actuelle.
+	 * @return la case sélectionnée.
+	 */
+	private GeneratorBox selectFromDepth(int depth, boolean tmp) {
 		for(int i=0; i<width; i++) {
 			for(int j=0; j<height; j++) {
 				GeneratorBox box = (GeneratorBox) getBox(i, j);
-				if(box.tmpDepth == depth && tmp || box.depth == depth && !tmp) result.add(box);
+				if(box.tmpDepth == depth && tmp || box.depth == depth && !tmp) return box;
 			}
 		}
 		
-		return result;
+		return null;
 	}
 	
-	private GeneratorBox randomFromDepth(int depth, boolean tmp) {
-		ArrayList<GeneratorBox> boxesDepth = getAllFromDepth(depth, tmp);
-		if(boxesDepth.size() == 0) return null;
-		return boxesDepth.get(random.nextInt(boxesDepth.size()));
-	}
-	
+	/**
+	 * Fonction qui convertit le labyrinthe générateur en labyrinthe fini, et renvoie le résultat.
+	 * @return
+	 */
 	public Maze convertToMaze() {
 		for(int i = 0; i<width; i++) {
 			for(int j = 0; j<height; j++) {
