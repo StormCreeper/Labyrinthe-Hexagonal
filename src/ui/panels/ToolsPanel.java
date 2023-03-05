@@ -6,6 +6,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
+
+import maze.generator.Generator;
 import ui.MazeWindow;
 import ui.buttons.MazeButton;
 
@@ -21,18 +23,20 @@ public final class ToolsPanel extends JPanel {
 
 	private MazeButton emptyButton;
 	private MazeButton loadButton;
+	private MazeButton generateButton;
 	private MazeButton saveButton;
 	private MazeButton solveButton;
 	
 	public ToolsPanel(MazeWindow window) {
 		
-		setLayout(new GridLayout(4, 1));
+		setLayout(new GridLayout(5, 1));
 		
 		setPreferredSize(new Dimension(200, 600));
 		setBackground(Color.red);
 		
 		add(emptyButton = new MazeButton(window, "Empty Maze"));
 		add(loadButton = new MazeButton(window, "Load Maze"));
+		add(generateButton = new MazeButton(window, "Generate Maze"));
 		add(saveButton = new MazeButton(window, "Save Maze"));
 		add(solveButton = new MazeButton(window, "Solve Maze"));
 		
@@ -49,6 +53,14 @@ public final class ToolsPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				window.showLoadDialog();
+			}
+		});
+		
+		generateButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				window.getLaby().setMaze(new Generator(30, 30).Generate().convertToMaze());
 			}
 		});
 		saveButton.addActionListener(new ActionListener() {

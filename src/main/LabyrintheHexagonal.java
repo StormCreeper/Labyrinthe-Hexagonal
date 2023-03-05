@@ -72,5 +72,11 @@ public final class LabyrintheHexagonal {
 	public Maze getMaze() {
 		return maze;
 	}
+	
+	public void setMaze(Maze maze) {
+		this.maze = maze;
+		path = null;
+		maze.change();
+	}
 
 }

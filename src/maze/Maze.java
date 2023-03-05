@@ -271,5 +271,9 @@ public class Maze implements Graph, Distance{
 	public boolean hasChanged() {
 		return changed;
 	}
+	
+	public void change() {
+		changed = true;
+	}
 
 }

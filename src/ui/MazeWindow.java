@@ -129,7 +129,7 @@ public final class MazeWindow extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Generator(30, 30).Generate();
+				laby.setMaze(new Generator(30, 30).Generate().convertToMaze());
 				
 			}
 		});
