@@ -22,10 +22,11 @@ import maze.boxes.EmptyBox;
  * @author Telo PHILIPPE
  *
  */
-public final class Maze implements Graph, Distance{
+public class Maze implements Graph, Distance{
 	
-	public MazeBox[][] boxes;
-	private int width, height;
+	protected MazeBox[][] boxes;
+	protected int width;
+	protected int height;
 	
 	// Variables pour sécuriser le changement de taille (le changement effectif ne se fait qu'au prochain reset du labyrinthe).
 	private int newWidth, newHeight;

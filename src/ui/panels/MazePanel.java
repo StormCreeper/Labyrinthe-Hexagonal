@@ -326,7 +326,7 @@ public final class MazePanel extends JPanel implements MouseMotionListener, Mous
 		for (int i = Math.max(selX - 1, 0); i <= Math.min(selX + 1, maze.getWidth() - 1); i++) {
 			for (int j = Math.max(selY - 1, 0); j <= Math.min(selY + 1, maze.getHeight() - 1); j++) {
 				if (getHexa(i, j).contains(new Point(mouseX, mouseY)))
-					selected = maze.boxes[i][j];
+					selected = maze.getBox(i, j);
 			}
 		}
 

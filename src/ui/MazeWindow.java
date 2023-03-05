@@ -21,6 +21,7 @@ import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 import main.LabyrintheHexagonal;
+import maze.generator.Generator;
 import ui.panels.ConsolePanel;
 import ui.panels.WindowPanel;
  
@@ -86,6 +87,8 @@ public final class MazeWindow extends JFrame {
 	 * Display
 	 * 	-> Toggle console
 	 * 	-> Toggle debug
+	 * Generate
+	 *  -> New generated maze
 	 */
 	public void createMenus() {
 		JMenuBar menuBar = new JMenuBar();
@@ -95,6 +98,9 @@ public final class MazeWindow extends JFrame {
 		JMenu displayMenu = new JMenu("Display");
 		JMenuItem consoleItem = new JMenuItem("Toggle console");
 		JMenuItem debugItem = new JMenuItem("Toggle debug");
+		
+		JMenu generateMenu = new JMenu("Generate");
+		JMenuItem generateItem = new JMenuItem("New generated maze");
 		
 		// Programmation des actions
 		
@@ -119,12 +125,24 @@ public final class MazeWindow extends JFrame {
 			}
 		});
 		
+		generateItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Generator(30, 30).Generate();
+				
+			}
+		});
+		
 		fileMenu.add(quitItem);
 		menuBar.add(fileMenu);
 		
 		displayMenu.add(consoleItem);
 		displayMenu.add(debugItem);
 		menuBar.add(displayMenu);
+		
+		generateMenu.add(generateItem);
+		menuBar.add(generateMenu);
 		
 		setJMenuBar(menuBar);
 	}
