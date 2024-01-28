@@ -1,7 +1,5 @@
-# PHILIPPE Telo
-
-## Nom
-Labyrinthe hexagonal
+# Labyrinthe hexagonal
+Ceci est mon rendu de projet Java pour le cours INF203 de Telecom Paris, année 2023.
 
 ## Description
 Ceci est mon implémentation d'un logiciel de résolution de labyrinthe sous forme de grille hexagonale. Il permet de :
@@ -14,7 +12,7 @@ Ceci est mon implémentation d'un logiciel de résolution de labyrinthe sous for
 // à venir
 
 ## Installation
-Vous pouvez juste télécharger le dossier du projet en .zip avec gitlab.
+Vous pouvez télécharger le dossier du projet en .zip avec github, ou cloner le repository.
 
 ## Utilisation
 Il suffit d'exécuter le fichier builds/build.jar. En ligne de commande, vous pouvez spécifier en argument le chemin d'accès à un fichier de labyrinthe, qui sera chargé au démarrage.
