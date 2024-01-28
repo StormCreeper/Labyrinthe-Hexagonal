@@ -5,6 +5,7 @@ Ceci est mon rendu de projet Java pour le cours INF203 de Telecom Paris, année 
 Ceci est mon implémentation d'un logiciel de résolution de labyrinthe sous forme de grille hexagonale. Il permet de :
 - Créer un labyrinthe vide en spécifiant une taille de grille
 - Charger et sauvegarder un labyrinthe dans un fichier
+- Générer un labyrinthe à partir de marches aléatoires
 - Modifier un labyrinthe avec la souris
 - Résoudre un labyrinthe avec l'algorithme de Dijkstra
 
@@ -27,7 +28,7 @@ Il y a quelques labyrinthes d'exemple : un petit, un moyen et un grand, ainsi qu
 Vous pouvez m'envoyer un mail à telo.philippe@telecom-paris.fr en cas de problème ou pour signaler un bug.
 
 ## Roadmap
-J'aimerais implémenter un algorithme de génération procédurale de labyrinthe, par exemple l'algorithme de Wilson.
+~~J'aimerais implémenter un algorithme de génération procédurale de labyrinthe, par exemple l'algorithme de Wilson.~~ Fait
 
 ## Auteur
 J'ai réalisé ce projet seul, pour le cours de MDI103 de Telecom Paris.
